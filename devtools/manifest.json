@@ -2,8 +2,8 @@
     "name": "ReactEvents",
     "version": "1.0",
     "manifest_version": 3,
-    "description": "Custom DevTools panel using React, Vite, and Babel",
-    "devtools_page": "devtools.html",
+    "description": "Custom DevTools panel using React and Vite",
+    "devtools_page": "./devtools.html",
     "permissions": [],
     "action": {
       "default_title": "ReactEvents DevTools"

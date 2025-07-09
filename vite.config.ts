@@ -8,10 +8,10 @@ export default defineConfig({
   plugins: [react(),
     viteStaticCopy({
       targets: [      
-      { src: 'manifest.json', dest: '.' },
-      { src: 'devtools.html', dest: '.' },
-      { src: 'devtools.js', dest: '.' },
-      { src: 'panel.html', dest: '.' },
+      { src: './devtools/manifest.json', dest: '.' },
+      { src: './devtools/devtools.html', dest: '.' },
+      { src: './devtools/devtools.js', dest: '.' },
+      { src: './devtools/panel.html', dest: '.' },
     ],
     })
   ],
