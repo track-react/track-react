@@ -20,8 +20,8 @@ function App() {
 
   return (
     <>
-    {/* <Timeline /> */}
-      <div>ReactEvents!</div>
+      <div>React-Events!</div>
+      <Timeline />
     </>
   );
 }
