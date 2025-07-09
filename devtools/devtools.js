@@ -1,8 +1,8 @@
 chrome.devtools.panels.create(
-    "React-Events",
+    "ReactEvents",
     "", //insert src image here
     "../index.html",
     function (panel) {
-        console.log("react DevTools panel has been created! Yay!")
+        console.log("ReactEvent DevTools panel has been created! Yay!")
     }
 )

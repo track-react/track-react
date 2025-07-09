@@ -1,6 +1,6 @@
 import "./App.css";
 import "../runtime/loggedFetch.ts";
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import Timeline from "./components/Timeline.tsx";
 
 function App() {
