@@ -7,7 +7,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
 import StarIcon from "@mui/icons-material/Star";
 
-//import "react-vertical-timeline-component/style.min.css";
+import "react-vertical-timeline-component/style.min.css";
 
 import "../App.css";
 

@@ -1,7 +1,7 @@
 import "./App.css";
 import "../runtime/loggedFetch.ts";
-import { useEffect } from "react";
-import Timeline from "./components/Timeline.tsx";
+import { useEffect } from 'react';
+// import Timeline from "./components/Timeline.tsx";
 
 function App() {
   useEffect(() => {
@@ -20,7 +20,8 @@ function App() {
 
   return (
     <>
-      <div>React-Events!</div>
+    {/* <Timeline /> */}
+      <div>ReactEvents!</div>
     </>
   );
 }
