@@ -11,6 +11,7 @@ export default defineConfig({
       { src: './devtools/manifest.json', dest: '.' },
       { src: './devtools/devtools.html', dest: '.' },
       { src: './devtools/devtools.js', dest: '.' },
+      { src: 'index.html', dest: '.' }
     ],
     })
   ],
