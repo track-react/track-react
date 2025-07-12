@@ -1,9 +1,17 @@
-import babel from "babel";
+import babel from 'babel';
 // import babel from '@vitejs/plugin-babel'
+export default function (babel) {
+  const { types: t } = babel;
 
-//function logic to log fetch
-
-// export default function logFetchCalls() {
-//   console.log("is this getting run");
-//   return window.postMessage("hi from logFetchCalls");
-// }
+  return {
+    name: 'Changing fetch to retrieveFetchData', //
+    visitor: {
+      CallExpression(path) {
+        // Originally had BlockStatement(path)
+        if (path.node.callee.name === 'fetch') {
+          path.node.callee.name = 'retrieveFetchData';
+        }
+      },
+    },
+  };
+}
