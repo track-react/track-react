@@ -4,7 +4,7 @@ export default function (babel) {
   const { types: t } = babel;
 
   return {
-    name: 'Changing fetch to retrieveFetchData', //
+    name: 'Changing fetch to retrieveFetchData', 
     visitor: {
       CallExpression(path) {
         // Originally had BlockStatement(path)

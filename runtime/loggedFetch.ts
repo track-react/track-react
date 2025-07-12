@@ -35,7 +35,7 @@ setTimeout(() => {
   );
 }, 1000);
 
-// async function retrieveFetchData(...args) {
+// async function retrieveFetchData (...args) {
 //   const start = performance.now();
 //   const res = await fetch(...args);
 //   const duration = performance.now() - start;
