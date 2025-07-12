@@ -37,12 +37,14 @@ function Timeline({ dataTest }: TimelineProps) {
         icon={<WorkIcon />}
       >
         <h3 className="vertical-timeline-element-title">
-          {el.source}
+          Source: {el.source}
         </h3>
         <h4 className="vertical-timeline-element-subtitle">
-          {el.type}
+          Type: {el.type}
         </h4>
-        <h3>{el.payload.url}</h3>
+        <h3>Payload: url {el.payload.url}</h3>
+        {/* <button>More Info</button>
+        <button>Ask AI</button> */}
       </VerticalTimelineElement>
     );
   });
