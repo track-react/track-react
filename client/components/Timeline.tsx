@@ -12,7 +12,7 @@ import 'react-vertical-timeline-component/style.min.css';
 import '../App.css';
 
 type TimelineProps = {
-  dataTest: {
+  events: {
     source: string;
     type: string;
     payload: {
@@ -23,25 +23,19 @@ type TimelineProps = {
   }[];
 };
 
-function Timeline({ dataTest }: TimelineProps) {
-  // console.log('dataTest in timeline', dataTest);
-
-  const verticalTimelineElements = dataTest.map((el) => {
+function Timeline({ events }: TimelineProps) {
+  const verticalTimelineElements = events.map((el) => {
     return (
       <VerticalTimelineElement
-        className="vertical-timeline-element--work"
+        className='vertical-timeline-element--work'
         contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
         contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-        date="2011 - present"
+        date='2011 - present'
         iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
         icon={<WorkIcon />}
       >
-        <h3 className="vertical-timeline-element-title">
-          Source: {el.source}
-        </h3>
-        <h4 className="vertical-timeline-element-subtitle">
-          Type: {el.type}
-        </h4>
+        <h3 className='vertical-timeline-element-title'>Source: {el.source}</h3>
+        <h4 className='vertical-timeline-element-subtitle'>Type: {el.type}</h4>
         <h3>Payload: url {el.payload.url}</h3>
         {/* <button>More Info</button>
         <button>Ask AI</button> */}

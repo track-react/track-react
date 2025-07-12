@@ -8,14 +8,14 @@ import { useState } from "react";
 function App() {
   //let dataTest: object = {};//useRef({});
 
-  const [dataTest, setDataTest] = useState([{source:"", type: "", payload: { url:"", status:0, duration:0 }}]);
+  const [events, setEvents] = useState([{source:"", type: "", payload: { url:"", status:0, duration:0 }}]);
   //useEffect(() => {
     window.addEventListener("message", (event) => {
       //console.log("entered if ");
       // console.log('looking for current property', event)
       if (event.data[0].source === "react-events") {
         console.log('this is the event.data', event.data);
-        setDataTest(event.data);
+        setEvents(event.data);
       }
 
       //console.log("this is the entire event", event);
@@ -27,7 +27,7 @@ function App() {
   return (
     <>
       <div>React-Events!</div>
-      <Timeline dataTest={dataTest}/>
+      <Timeline events={events}/>
     </>
   );
 }
