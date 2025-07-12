@@ -34,3 +34,32 @@ setTimeout(() => {
     '*'
   );
 }, 1000);
+
+async function retrieveFetchData(...args) {
+  const start = performance.now();
+  const res = await fetch(...args);
+  const duration = performance.now() - start;
+  const cloned = res.clone();
+  let json;
+  try {
+    json = await cloned.json();
+  } catch (e) {
+    json = null;
+  }
+  window.postMessage(
+    {
+      source: 'react-events-devtool',
+      type: 'fetch-event',
+      payload: {
+        url: args[0],
+        start,
+        duration,
+        status: res.status,
+        ok: res.ok,
+        json,
+      },
+    },
+    '*'
+  );
+  return res;
+}
