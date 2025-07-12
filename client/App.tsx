@@ -1,33 +1,56 @@
-import "./App.css";
-import "../runtime/loggedFetch.ts";
-//import { useEffect } from 'react';
+import './App.css';
+import '../runtime/loggedFetch.ts';
+import { useEffect } from 'react';
 //import { useRef } from 'react';
-import Timeline from "./components/Timeline.tsx";
-import { useState } from "react";
+import Timeline from './components/Timeline.tsx';
+import { useState } from 'react';
+
+type EventType = {
+  source: string;
+  type: string;
+  url: string;
+  start: number;
+  duration: number;
+  status: number;
+  responseOK: boolean;
+  json: unknown;
+};
 
 function App() {
-  //let dataTest: object = {};//useRef({});
+  const [events, setEvents] = useState<EventType[]>([]);
 
-  const [events, setEvents] = useState([{source:"", type: "", payload: { url:"", status:0, duration:0 }}]);
-  //useEffect(() => {
-    window.addEventListener("message", (event) => {
-      //console.log("entered if ");
-      // console.log('looking for current property', event)
-      if (event.data[0].source === "react-events") {
-        console.log('this is the event.data', event.data);
-        setEvents(event.data);
+  useEffect(() => {
+
+    window.addEventListener('message', (event) => {
+   
+      if (event.data.retrieveFetchDataSource === 'react-events-devtool') {
+        console.log('entered if');
+        setEvents((prev) => {
+          return [
+            ...prev,
+            {
+              source: event.data.retrieveFetchDataSource,
+              type: event.data.retrieveFetchDataType,
+              url: event.data.retrieveFetchDataUrl,
+              start: event.data.retrieveFetchDataStart,
+              duration: event.data.retrieveFetchDataDuration,
+              status: event.data.retrieveFetchDataResponseStatus,
+              responseOK: event.data.retrieveFetchDataResponseOk,
+              json: event.data.retrieveFetchDataJson,
+            },
+          ];
+        });
       }
-
-      //console.log("this is the entire event", event);
-      // console.log("this is console.log in app.tsx", event.data);
-      // console.log('this is the fetch length', event.currentTarget.fetch.length);
     });
- // }, []);
+    
+  }, []);
+
+  
 
   return (
     <>
       <div>React-Events!</div>
-      <Timeline events={events}/>
+      <Timeline events={events} />
     </>
   );
 }

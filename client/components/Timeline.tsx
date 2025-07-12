@@ -15,11 +15,12 @@ type TimelineProps = {
   events: {
     source: string;
     type: string;
-    payload: {
-      url: string;
-      duration: number;
-      status: number;
-    };
+    url: string;
+    start: number;
+    duration: number;
+    status: number;
+    responseOK: boolean;
+    json: unknown;
   }[];
 };
 
@@ -36,7 +37,7 @@ function Timeline({ events }: TimelineProps) {
       >
         <h3 className='vertical-timeline-element-title'>Source: {el.source}</h3>
         <h4 className='vertical-timeline-element-subtitle'>Type: {el.type}</h4>
-        <h3>Payload: url {el.payload.url}</h3>
+        <h3>URL: {el.url}</h3>
         {/* <button>More Info</button>
         <button>Ask AI</button> */}
       </VerticalTimelineElement>
