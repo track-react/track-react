@@ -1,5 +1,5 @@
 import './App.css';
-import '../runtime/loggedFetch.ts';
+import '../runtime/retrieveFetchData.ts';
 import { useEffect } from 'react';
 //import { useRef } from 'react';
 import Timeline from './components/Timeline.tsx';
