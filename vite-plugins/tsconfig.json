@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "./dist", // Optional: specify an output directory for compiled JS
+    "strict": true, // Recommended: enables a wide range of type-checking validation rules
+    "esModuleInterop": true, // Recommended: enables compatibility for default imports with CommonJS modules
+
+  },
+  "include": [
+    "./fetchPlugin.ts",
+    "./babel-plugins/fetchPlugin.js';"
+  ]
+}
