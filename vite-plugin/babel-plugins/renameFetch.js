@@ -9,20 +9,14 @@ export default function renameFetch(babel, ...args) {
       CallExpression(path) {
         // Originally had BlockStatement(path)
         const callee = path.get('callee');
-        // console.log('type', callee.node.type);
-        // console.log('name', callee.node.name);
 
         if (callee) {
           if (callee.isIdentifier({ name: 'fetch' })) {
             console.log('replacing normal fetch');
             //replacing normal fetch call
-            //callee.node.name = 'retrieveFetchData';
+
             callee.replaceWith(t.identifier('retrieveFetchData'));
-          } else if (
-            callee.isMemberExpression()
-            // type === 'MemberExpression' &&
-            // callee.node.property.name === 'fetch'
-          ) {
+          } else if (callee.isMemberExpression()) {
             const memberObject = callee.get('object');
             const memberProperty = callee.get('property');
             if (

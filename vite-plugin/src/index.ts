@@ -3,7 +3,7 @@ import { Plugin } from 'vite';
 import path from 'path';
 // import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
-import renameFetch from '../babel-plugins/logFetchCalls.js';
+import renameFetch from '../babel-plugins/renameFetch.js';
 
 export function fetchPlugin(): Plugin {
   // Returns a Vite-compatible plugin object

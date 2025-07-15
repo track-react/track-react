@@ -20,11 +20,12 @@ function App() {
   const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
-
     window.addEventListener('message', (event) => {
-   
+      console.log('event listener triggered');
+      console.log('event.data', event.data);
+      console.log('events array use state', events);
       if (event.data.retrieveFetchDataSource === 'react-events-devtool') {
-        console.log('entered if');
+        console.log('event listener caught fetch event');
         setEvents((prev) => {
           return [
             ...prev,
@@ -36,16 +37,15 @@ function App() {
               duration: event.data.retrieveFetchDataDuration,
               status: event.data.retrieveFetchDataResponseStatus,
               responseOK: event.data.retrieveFetchDataResponseOk,
-              json: event.data.retrieveFetchDataJson,
+              json: event.data.json,
             },
           ];
         });
       }
     });
-    
-  }, []);
 
-  
+    //unmount?
+  }, [events]);
 
   return (
     <>
