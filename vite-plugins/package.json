@@ -1,0 +1,22 @@
+{
+  "name": "vite-plugins",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/parser": "^7.28.0",
+    "@babel/traverse": "^7.28.0",
+    "@babel/types": "^7.28.1",
+    "@types/react": "^19.1.8",
+    "csstype": "^3.1.3",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.4"
+  }
+}
