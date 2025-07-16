@@ -14,6 +14,7 @@ export default defineConfig({
       { src: './devtools/manifest.json', dest: '.' },
       { src: './devtools/devtools.html', dest: '.' },
       { src: './devtools/devtools.js', dest: '.' },
+      { src: './devtools/background.js', dest: '.' },
     ],
     })
   ],
@@ -21,4 +22,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
+  optimizeDeps: {
+    include: ['@emotion/react', '@emotion/styled']
+  }
 });
