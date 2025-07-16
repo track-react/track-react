@@ -21,19 +21,19 @@ function App() {
 
   useEffect(() => {
     window.addEventListener('message', (event) => {
-      if (event.data.retrieveFetchDataSource === 'react-events-devtool') {
+      if (event.data.source === 'react-events-plugin') {
         console.log('entered if');
         setEvents((prev) => {
           return [
             ...prev,
             {
-              source: event.data.retrieveFetchDataSource,
-              type: event.data.retrieveFetchDataType,
-              url: event.data.retrieveFetchDataUrl,
-              start: event.data.retrieveFetchDataStart,
-              duration: event.data.retrieveFetchDataDuration,
-              status: event.data.retrieveFetchDataResponseStatus,
-              responseOK: event.data.retrieveFetchDataResponseOk,
+              source: event.data.source,
+              type: event.data.type,
+              url: event.data.url,
+              start: event.data.start,
+              duration: event.data.duration,
+              status: event.data.status,
+              responseOK: event.data.responseOk,
               json: event.data.json,
             },
           ];
