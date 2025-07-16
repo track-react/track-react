@@ -1,11 +1,12 @@
-import { Plugin } from 'vite';
+//import { Plugin } from 'vite'; //used to be this, but was getting type errors in vite.config of fetch-test repo so I changed it to below:
+import type { PluginOption } from 'vite';
 // import fs from 'fs';
 import path from 'path';
 // import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
 
-export function fetchPlugin(): Plugin {
+export function fetchPlugin(): PluginOption {
   // Returns a Vite-compatible plugin object
   // can be imported to vite.config.ts as reactEventsPlugin()
   return {
