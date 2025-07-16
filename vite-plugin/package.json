@@ -1,0 +1,35 @@
+{
+  "name": "vite-plugin-react-events",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./retrieveFetchData": {
+      "import": "./dist/runtime/retrieveFetchData.js",
+      "require": "./dist/runtime/retrieveFetchData.js"
+    }
+  },
+  "files": [
+    "dist",
+    "runtime"
+  ],
+  "peerDependencies": {
+    "vite": "^4.0.0 || ^5.0.0 || ^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/plugin-syntax-jsx": "^7.27.1",
+    "@babel/preset-typescript": "^7.24.7",
+    "tsup": "^8.5.0",
+    "typescript": "^5.4.5",
+    "vite": "^7.0.0"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
+}
