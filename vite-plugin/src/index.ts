@@ -1,6 +1,7 @@
 import { Plugin } from 'vite';
 // import fs from 'fs';
 import path from 'path';
+import babel from '@rollup/plugin-babel'
 // import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
@@ -24,17 +25,21 @@ export function fetchPlugin(): Plugin {
 
     //https://rollupjs.org/plugin-development/#transform
     async transform(code, id) {
-      console.log('[plugin] transforming file:', id);
-      console.log('[plugin] original code:', code);
+      console.log('[plugin] transforming received:', id);
       // ignore all files that don't end in .js .jsx .ts .tsx
       //or have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveFetchData.ts') ||
+        id.includes('retrieveFetchData.js') ||  // add this
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
       }
+      if (code.includes('fetch(')) {
+        console.log(`[plugin] ${id} contains fetch calls, transforming...`)
+      }
+      
 
       // Use Babel to transform the code with the renameFetch plugin
       const babel = await import('@babel/core');
@@ -45,7 +50,7 @@ export function fetchPlugin(): Plugin {
         sourceMaps: true,
         configFile: false,
       });
-  
+      console.log('*this is the result.code', result.code)
       // Return the transformed code and map (if available)
       if (result && result.code) {
         console.log(

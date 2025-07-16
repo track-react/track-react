@@ -22,6 +22,7 @@ export default defineConfig({
     '@babel/core',
     '@babel/preset-typescript', // add others if you import them at runtime
   ],
+  tsconfig: 'tsconfig.json',
 
   // ⑥ run after build succeeds
   async onSuccess() {

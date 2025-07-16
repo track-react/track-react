@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     host: true, // equivalent to --host
   },
-  plugins: [react(),
+  plugins: [
+    react(),
     viteStaticCopy({
       targets: [      
       { src: './devtools/manifest.json', dest: '.' },

@@ -25,10 +25,10 @@ type TimelineProps = {
 };
 
 function Timeline({ events }: TimelineProps) {
-  const verticalTimelineElements = events.map((el) => {
+  const verticalTimelineElements = events.map((el, i) => {
     // console.log('fetch object in timeline:', el);
     return (
-      <VerticalTimelineElement
+      <VerticalTimelineElement key={`${el.url}-${i}`}
         className='vertical-timeline-element--work'
         contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
         contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
