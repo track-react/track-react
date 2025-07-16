@@ -109,6 +109,7 @@ console.log('is this getting run');
 // }, 1000);
 
 export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
+  console.log('retrieveFetchData called with args:', args);
   const retrieveFetchDataStart = performance.now();
   const retrieveFetchDataResponse = await fetch(...args);
   const retrieveFetchDataDuration = performance.now() - retrieveFetchDataStart;
@@ -139,5 +140,5 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
     '*'
   );
   return retrieveFetchDataResponse;
-  //}, 1000);
+  //} 1000);
 }
