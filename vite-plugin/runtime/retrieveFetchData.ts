@@ -4,21 +4,21 @@ console.log('is this getting run');
 setTimeout(() => {
   window.postMessage(
     {
-      retrieveFetchDataSource: 'react-events-devtool',
-      retrieveFetchDataType: 'fetch-event',
-      retrieveFetchDataUrl: 'www.parker.com',
-      retrieveFetchDataStart: '0020',
-      retrieveFetchDataDuration: '0020',
-      retrieveFetchDataResponseStatus: 200,
-      retrieveFetchDataResponseOk: 'ok',
-      retrieveFetchDataJson: [{ prop: 'stuff' }],
+      source: 'react-events-plugin',
+      type: 'fetch-event',
+      url: 'www.parker.com',
+      start: '0020',
+      duration: '0020',
+      status: 200,
+      responseOk: 'ok',
+      json: [{ prop: 'stuff' }],
     },
     // {
     //   retrieveFetchDataSource: 'react-events-devtool',
     //   retrieveFetchDataType: 'useEffect',
-    //   retrieveFetchDataUrl: 'www.emily.com',
+    //   url: 'www.emily.com',
     //   retrieveFetchDataStart: '0020',
-    //   retrieveFetchDataDuration: '0020',
+    //   duration: '0020',
     //   retrieveFetchDataResponseStatus: 200,
     //   retrieveFetchDataResponseOk: 'ok',
     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
@@ -26,9 +26,9 @@ setTimeout(() => {
     // {
     //   retrieveFetchDataSource: 'react-events-devtool',
     //   retrieveFetchDataType: 'useCallback',
-    //   retrieveFetchDataUrl: 'www.pedro.com',
+    //   url: 'www.pedro.com',
     //   retrieveFetchDataStart: '0020',
-    //   retrieveFetchDataDuration: '0020',
+    //   duration: '0020',
     //   retrieveFetchDataResponseStatus: 200,
     //   retrieveFetchDataResponseOk: 'ok',
     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
@@ -38,14 +38,14 @@ setTimeout(() => {
 }, 1000);
 
 export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
-  const retrieveFetchDataStart = performance.now();
-  const retrieveFetchDataResponse = await fetch(...args);
-  const retrieveFetchDataDuration = performance.now() - retrieveFetchDataStart;
-  const retrieveFetchDataCloned = retrieveFetchDataResponse.clone();
-  const retrieveFetchDataUrl = retrieveFetchDataResponse.url;
+  const start = performance.now();
+  const res = await fetch(...args);
+  const duration = performance.now() - start;
+  const clone = res.clone();
+  const url = res.url;
   let json;
   try {
-    json = await retrieveFetchDataCloned.json();
+    json = await clone.json();
   } catch (e) {
     console.log(e);
     json = null;
@@ -53,16 +53,16 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
   console.log('fetch transformed from retrieveFetchData');
   window.postMessage(
     {
-      retrieveFetchDataSource: 'react-events-devtool',
-      retrieveFetchDataType: 'fetch-event',
-      retrieveFetchDataUrl,
-      retrieveFetchDataStart,
-      retrieveFetchDataDuration,
-      retrieveFetchDataResponseStatus: retrieveFetchDataResponse.status,
-      retrieveFetchDataResponseOk: retrieveFetchDataResponse.ok,
+      source: 'react-events-plugin',
+      type: 'fetch-event',
+      url,
+      start: start,
+      duration,
+      status: res.status,
+      responseOk: res.ok,
       json,
     },
     '*'
   );
-  return retrieveFetchDataResponse;
+  return res;
 }
