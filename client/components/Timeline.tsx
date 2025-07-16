@@ -26,6 +26,7 @@ type TimelineProps = {
 
 function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el) => {
+    // console.log('fetch object in timeline:', el);
     return (
       <VerticalTimelineElement
         className='vertical-timeline-element--work'

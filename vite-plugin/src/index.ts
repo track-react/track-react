@@ -3,9 +3,10 @@ import { Plugin } from 'vite';
 import path from 'path';
 // import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
-import renameFetch from '../babel-plugins/logFetchCalls.js';
+import renameFetch from '../babel-plugins/renameFetch.js';
 
 export function fetchPlugin(): Plugin {
+  console.log('*****ENTERING PLUGIN******');
   // Returns a Vite-compatible plugin object
   // can be imported to vite.config.ts as reactEventsPlugin()
   return {
@@ -23,10 +24,13 @@ export function fetchPlugin(): Plugin {
 
     //https://rollupjs.org/plugin-development/#transform
     async transform(code, id) {
+      console.log('[plugin] transforming file:', id);
+      console.log('[plugin] original code:', code);
       // ignore all files that don't end in .js .jsx .ts .tsx
+      //or have already been transformed
       if (
         id.includes('node_modules') ||
-        id.includes('retrieveFetchData') ||
+        id.includes('retrieveFetchData.ts') ||
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
@@ -41,8 +45,13 @@ export function fetchPlugin(): Plugin {
         sourceMaps: true,
         configFile: false,
       });
+  
       // Return the transformed code and map (if available)
       if (result && result.code) {
+        console.log(
+          '********** code transformed in some way!!!! from index ',
+          result.code
+        );
         return {
           code: result.code,
           map: result.map || null,

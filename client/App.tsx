@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import './App.css';
-import '../vite-plugin/runtime/retrieveFetchData.ts';
+import { retrieveFetchData } from '../vite-plugin/runtime/retrieveFetchData.ts';
 import { useEffect } from 'react';
 //import { useRef } from 'react';
 import Timeline from './components/Timeline.tsx';
@@ -20,11 +21,18 @@ function App() {
   const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
+    retrieveFetchData('https://jsonplaceholder.typicode.com/todos/1').then((res) => {
+      console.log('this is the response from retrieveFeetchData:', res);
+    });
+  }, []);
 
-    window.addEventListener('message', (event) => {
-   
+  const handleMessage = (event: MessageEvent) => {
+    {
+      console.log('event listener triggered');
+      console.log('event.data', event.data);
+      console.log('events array use state', events);
       if (event.data.retrieveFetchDataSource === 'react-events-devtool') {
-        console.log('entered if');
+        console.log('event listener caught fetch event');
         setEvents((prev) => {
           return [
             ...prev,
@@ -36,16 +44,20 @@ function App() {
               duration: event.data.retrieveFetchDataDuration,
               status: event.data.retrieveFetchDataResponseStatus,
               responseOK: event.data.retrieveFetchDataResponseOk,
-              json: event.data.retrieveFetchDataJson,
+              json: event.data.json,
             },
           ];
         });
       }
-    });
-    
-  }, []);
+    }
+  };
 
-  
+  useEffect(() => {
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
   return (
     <>
