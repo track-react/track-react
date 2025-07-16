@@ -4,6 +4,9 @@
     "manifest_version": 3,
     "description": "Custom DevTools panel using React and Vite",
     "devtools_page": "./devtools.html",
+    "background": {
+      "service_worker": "background.js"
+    },
     "permissions": [],
     "action": {
       "default_title": "ReactEvents DevTools"

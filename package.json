@@ -23,6 +23,8 @@
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@eslint/js": "^9.29.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/pluginutils": "^5.2.0",
     "@types/chrome": "^0.0.332",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -32,7 +34,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
-    "typescript": "~5.8.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.34.1",
     "vite": "^7.0.0",
     "vite-plugin-static-copy": "^3.1.0"
