@@ -1,28 +1,30 @@
-export default function renameFetch(babel) {
-
+import * as babel from '@babel/core';
+// import babel from '@vitejs/plugin-babel'
+export default function renameFetch(babel, ...args) {
   const { types: t } = babel;
 
   return {
-    name: 'rename-fetch-to-retrieveFetchData',
+    name: 'Changing fetch to retrieveFetchData',
     visitor: {
       CallExpression(path) {
         const callee = path.get('callee');
 
-        if (callee.isIdentifier({ name: 'fetch' })) {
-          // Replace simple fetch() with retrieveFetchData()
-          callee.replaceWith(t.identifier('retrieveFetchData'));
-        } else if (callee.isMemberExpression()) {
-          const object = callee.get('object');
-          const property = callee.get('property');
-
-          if (
-            (object.isIdentifier({ name: 'window' }) ||
-              object.isIdentifier({ name: 'globalThis' })) &&
-            property.isIdentifier({ name: 'fetch' })
-          ) {
-            // Replace window.fetch or globalThis.fetch with retrieveFetchData
-            // Replace whole callee with retrieveFetchData identifier
+        if (callee) {
+          if (callee.isIdentifier({ name: 'fetch' })) {
+            console.log('replacing normal fetch');
+            //replacing normal fetch call
             callee.replaceWith(t.identifier('retrieveFetchData'));
+          } else if (callee.isMemberExpression()) {
+            const memberObject = callee.get('object');
+            const memberProperty = callee.get('property');
+            if (
+              (memberObject.isIdentifier({ name: 'window' }) ||
+                memberObject.isIdentifier({ name: 'globalThis' })) &&
+              memberProperty.isIdentifier({ name: 'fetch' })
+            ) {
+              //replacing window.fetch and globalThis.fetch calls
+              memberProperty.replaceWith(t.identifier('retrieveFetchData'));
+            }
           }
         }
       },

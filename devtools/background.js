@@ -1,27 +1,18 @@
 let devtoolsPort = null;
 
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === 'devtools') {
-    console.log('[Background] DevTools connected');
+  if (port.name === 'react-events-bridge') {
     devtoolsPort = port;
 
     port.onDisconnect.addListener(() => {
-      console.log('[Background] DevTools disconnected');
       devtoolsPort = null;
     });
   }
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'WINDOW_MESSAGE') {
-    console.log('[Background] Got message from content script:', message.data);
-
-    if (devtoolsPort) {
-      devtoolsPort.postMessage(message.data);
-      sendResponse({ status: 'sent to devtools' });
-    } else {
-      console.warn('[Background] No devtoolsPort connected');
-      sendResponse({ error: 'no devtools panel connected' });
-    }
+  if (devtoolsPort) {
+    console.log('2. FROM BACKGROUND SCRIPT: message: ', message);
+    devtoolsPort.postMessage(message);
   }
 });

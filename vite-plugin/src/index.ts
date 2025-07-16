@@ -1,7 +1,7 @@
 import { Plugin } from 'vite';
 // import fs from 'fs';
 import path from 'path';
-import babel from '@rollup/plugin-babel'
+//import babel from '@rollup/plugin-babel';
 // import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
@@ -24,39 +24,49 @@ export function fetchPlugin(): Plugin {
     },
 
     //https://rollupjs.org/plugin-development/#transform
+
     async transform(code, id) {
-      console.log('[plugin] transforming received:', id);
+      // console.log('[plugin] transforming received:', id);
       // ignore all files that don't end in .js .jsx .ts .tsx
       //or have already been transformed
       if (
         id.includes('node_modules') ||
+        id.includes('retrieveFetchData') ||
         id.includes('retrieveFetchData.ts') ||
-        id.includes('retrieveFetchData.js') ||  // add this
+        id.includes('retrieveFetchData.js') || // add this
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
       }
       if (code.includes('fetch(')) {
-        console.log(`[plugin] ${id} contains fetch calls, transforming...`)
+        console.log(`[plugin] ${id} contains fetch calls, transforming...`);
       }
-      
 
       // Use Babel to transform the code with the renameFetch plugin
       const babel = await import('@babel/core');
       const jsxSyntax = (await import('@babel/plugin-syntax-jsx')).default;
+      const tsSyntax = [
+        (await import('@babel/plugin-syntax-typescript')).default,
+        { isTSX: true },
+      ];
+      console.log(`***[plugin] transforming file: ${id}`);
       const result = await babel.transformAsync(code, {
         filename: id,
-        plugins: [jsxSyntax, renameFetch],
+        plugins: [jsxSyntax, ...[tsSyntax], renameFetch],
         sourceMaps: true,
         configFile: false,
+        parserOpts: {
+          sourceType: 'module',
+          plugins: ['jsx', 'typescript'], //added when wouldnt work for typescript in fetchEvents
+        },
       });
-      console.log('*this is the result.code', result.code)
+      // console.log('*this is the result.code', result.code);
       // Return the transformed code and map (if available)
       if (result && result.code) {
-        console.log(
-          '********** code transformed in some way!!!! from index ',
-          result.code
-        );
+        // console.log(
+        //   '********** code transformed in some way!!!! from index ',
+        //   result.code
+        // );
         return {
           code: result.code,
           map: result.map || null,

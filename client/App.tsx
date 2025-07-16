@@ -21,86 +21,52 @@ function App() {
   const [events, setEvents] = useState<EventType[]>([]);
 
   // useEffect(() => {
-  //   retrieveFetchData('https://jsonplaceholder.typicode.com/todos/1').then(
-  //     (res) => {
-  //       console.log('this is the response from retrieveFeetchData:', res);
+  //   window.addEventListener('message', (event) => {
+  //     console.log('5. DATA CAUGHT IN APP.TSX', event.data);
+  //     if (event.data.source === 'react-events-plugin') {
+  //       console.log('data caught in app.tsx!!', event.data);
+  //       console.log('entered if');
+  //       setEvents((prev) => {
+  //         return [
+  //           ...prev,
+  //           {
+  //             source: event.data.source,
+  //             type: event.data.type,
+  //             url: event.data.url,
+  //             start: event.data.start,
+  //             duration: event.data.duration,
+  //             status: event.data.status,
+  //             responseOK: event.data.responseOk,
+  //             json: event.data.json,
+  //           },
+  //         ];
+  //       });
   //     }
-  //   );
+  //   });
   // }, []);
-
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      {
-        console.log('event listener triggered');
-        console.log('event.data', event.data);
-        console.log('events array use state', events);
-        if (event.data.retrieveFetchDataSource === 'react-events-devtool') {
-          console.log('event listener caught fetch event');
-          setEvents((prev) => {
-            return [
-              ...prev,
-              {
-                source: event.data.retrieveFetchDataSource,
-                type: event.data.retrieveFetchDataType,
-                url: event.data.retrieveFetchDataUrl,
-                start: event.data.retrieveFetchDataStart,
-                duration: event.data.retrieveFetchDataDuration,
-                status: event.data.retrieveFetchDataResponseStatus,
-                responseOK: event.data.retrieveFetchDataResponseOk,
-                json: event.data.json,
-              },
-            ];
-          });
-        }
-      }
-    },
-    [events]
-  );
-
   useEffect(() => {
-    function sendToChrome() {
-      console.log('[ENTERED SENDTOCHROME()!!!!!!]');
+    const port = chrome.runtime.connect({ name: 'react-events-bridge' });
 
-      // Store the listener function so we can remove it later
-      const messageHandler = (event: MessageEvent) => {
-        console.log('Inside windowMessage', event.data);
+    port.onMessage.addListener((message) => {
+      console.log('✅ Message received in React panel:', message);
 
-        // Send the message data to Chrome extension
-        chrome.runtime
-          .sendMessage({
-            type: 'WINDOW_MESSAGE',
-            data: event.data,
-          })
-          .then((response) => {
-            console.log('[CHROME RELAY RESPONSE]', response);
-          })
-          .catch((error) => {
-            console.error('[CHROME RELAY ERROR]', error);
-          });
-      };
+      setEvents((prev) => [
+        ...prev,
+        {
+          source: message.source,
+          type: message.type,
+          url: message.url,
+          start: message.start,
+          duration: message.duration,
+          status: message.status,
+          responseOK: message.responseOk,
+          json: message.json,
+        },
+      ]);
+    });
 
-      // Listen for window messages and forward them to Chrome extension
-      window.addEventListener('message', messageHandler);
-
-      // Listen for messages from Chrome extension
-      chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-        console.log('[CHROME RUNTIME LISTENER]', message);
-        handleMessage(message);
-
-        // Optionally send a response back
-        sendResponse({ received: true });
-      });
-
-      // Return cleanup function
-      return () => {
-        window.removeEventListener('message', messageHandler);
-      };
-    }
-
-    const cleanup = sendToChrome();
-
-    return cleanup;
-  }, [handleMessage]);
+    return () => port.disconnect();
+  }, []);
 
   return (
     <>

@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     viteStaticCopy({
+<<<<<<< HEAD
       targets: [      
       { src: './devtools/manifest.json', dest: '.' },
       { src: './devtools/devtools.html', dest: '.' },
@@ -17,6 +18,16 @@ export default defineConfig({
       { src: './devtools/background.js', dest: '.' },
     ],
     })
+=======
+      targets: [
+        { src: './devtools/manifest.json', dest: '.' },
+        { src: './devtools/devtools.html', dest: '.' },
+        { src: './devtools/devtools.js', dest: '.' },
+        { src: './devtools/content.js', dest: '.' },
+        { src: './devtools/background.js', dest: '.' },
+      ],
+    }),
+>>>>>>> fbbdf2125988a836d013e0e502cb277df2988c99
   ],
   build: {
     outDir: 'dist',
