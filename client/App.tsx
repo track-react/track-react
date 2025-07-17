@@ -73,7 +73,7 @@ function App() {
 
   return (
     <>
-      <div>React-Events!</div>
+      {/* <div>React-Events!</div> */}
       <Timeline events={events} />
     </>
   );
