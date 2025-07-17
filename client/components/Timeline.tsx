@@ -5,7 +5,7 @@ import {
 
 // import WorkIcon from '@mui/icons-material/Work';
 //import SchoolIcon from "@mui/icons-material/School";
-import StarPurple500 from "@mui/icons-material/Star";
+import StarPurple500 from '@mui/icons-material/Star';
 
 import 'react-vertical-timeline-component/style.min.css';
 
@@ -15,35 +15,49 @@ type TimelineProps = {
   events: {
     source: string;
     type: string;
+    method: string;
     url: string;
     start: number;
     duration: number;
     status: number;
     responseOK: boolean;
-    json: string[] | null;
+    json: unknown; //string[] | null ;
   }[];
 };
 
 function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el) => {
+    const color = el.responseOK ? 'rgb(33, 150, 243)' : '#fc4040';
     return (
       <VerticalTimelineElement
         className='vertical-timeline-element--work'
-        contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        contentStyle={{
+          background: color,
+          color: '#fff',
+        }}
+        contentArrowStyle={{ borderRight: '7px solid', color }}
+        iconStyle={{
+          background: color,
+          color: '#fff',
+        }}
         icon={<StarPurple500 />}
       >
         <h3 className=''>Source: {el.source}</h3>
         <h4 className=''>Type: {el.type}</h4>
+        <h4>HTTP Method: {el.method}</h4>
         <h4>URL: {el.url}</h4>
         <h4>Start: {el.start}</h4>
         <h4>Duration: {el.duration}</h4>
-        <h4>Status: {el.status}</h4>
-        <h4>ResponseOK: {el.responseOK}</h4>
-        <h4>JSON: {el.json}</h4>
+        <h4>Status: {el.status ? el.status : 'n/a'}</h4>
+        <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
+        <h4>JSON: {JSON.stringify(el.json)}</h4>
         <button className='mini ui button'>More Info</button>
-        <button className='mini ui button'>Ask AI</button>
+        <button
+          className='mini ui button'
+          style={{ marginLeft: '10px' }}
+        >
+          Ask AI
+        </button>
       </VerticalTimelineElement>
     );
   });
