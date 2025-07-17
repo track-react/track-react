@@ -1,8 +1,14 @@
 // This file must be imported somewhere in the user’s code (or injected automatically by your plugin if possible).
 
 export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
-  console.log('Entering retrieveFetchData')
+  console.log('Entering retrieveFetchData');
   const url = args[0]; // url will always be the first arg in the array
+  let method;
+  if (args[1] && args[1].method) {
+    method = args[1]?.method;
+  } else {
+    method = 'GET';
+  }
   const start = performance.now();
   let res = null;
   let clone;
@@ -36,10 +42,12 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
     json = null;
   }
   console.log('Fetch has been transformed from retrieveFetchData'); //successfully transformed fetch
-  window.postMessage( //sending updated properties to window object
+  window.postMessage(
+    //sending updated properties to window object
     {
       source: 'react-events-plugin',
       type: 'fetch-event',
+      method, //'fetch-event',
       url,
       start,
       duration,

@@ -15,6 +15,7 @@ type TimelineProps = {
   events: {
     source: string;
     type: string;
+    method: string;
     url: string;
     start: number;
     duration: number;
@@ -36,6 +37,7 @@ function Timeline({ events }: TimelineProps) {
       >
         <h3 className=''>Source: {el.source}</h3>
         <h4 className=''>Type: {el.type}</h4>
+        <h4>HTTP Method: {el.method}</h4>
         <h4>URL: {el.url}</h4>
         <h4>Start: {el.start}</h4>
         <h4>Duration: {el.duration}</h4>
@@ -43,7 +45,12 @@ function Timeline({ events }: TimelineProps) {
         <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
         <h4>JSON: {JSON.stringify(el.json)}</h4>
         <button className='mini ui button'>More Info</button>
-        <button className='mini ui button' style={{ marginLeft: '10px' }}>Ask AI</button>
+        <button
+          className='mini ui button'
+          style={{ marginLeft: '10px' }}
+        >
+          Ask AI
+        </button>
       </VerticalTimelineElement>
     );
   });

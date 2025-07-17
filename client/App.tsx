@@ -8,6 +8,7 @@ import { useState } from 'react';
 type EventType = {
   source: string;
   type: string;
+  method: string;
   url: string;
   start: number;
   duration: number;
@@ -54,6 +55,7 @@ function App() {
         {
           source: message.source,
           type: message.type,
+          method: message.method,
           url: message.url,
           start: message.start,
           duration: message.duration,
