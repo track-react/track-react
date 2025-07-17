@@ -5,7 +5,7 @@ import {
 
 // import WorkIcon from '@mui/icons-material/Work';
 //import SchoolIcon from "@mui/icons-material/School";
-import StarPurple500 from "@mui/icons-material/Star";
+import StarPurple500 from '@mui/icons-material/Star';
 
 import 'react-vertical-timeline-component/style.min.css';
 
@@ -20,7 +20,7 @@ type TimelineProps = {
     duration: number;
     status: number;
     responseOK: boolean;
-    json: string[] | null;
+    json: unknown; //string[] | null ;
   }[];
 };
 
@@ -40,8 +40,8 @@ function Timeline({ events }: TimelineProps) {
         <h4>Start: {el.start}</h4>
         <h4>Duration: {el.duration}</h4>
         <h4>Status: {el.status}</h4>
-        <h4>ResponseOK: {el.responseOK}</h4>
-        <h4>JSON: {el.json}</h4>
+        <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
+        <h4>JSON: {JSON.stringify(el.json)}</h4>
         <button className='mini ui button'>More Info</button>
         <button className='mini ui button'>Ask AI</button>
       </VerticalTimelineElement>

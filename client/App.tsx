@@ -13,7 +13,7 @@ type EventType = {
   duration: number;
   status: number;
   responseOK: boolean;
-  json: string[] | null;
+  json: unknown; //string[] | null;
 };
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
 
     port.onMessage.addListener((message) => {
       console.log('✅ Message received in React panel:', message);
-
+      console.log(' TYPE OF JSON: ', typeof message.json);
       setEvents((prev) => [
         ...prev,
         {
