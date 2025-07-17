@@ -13,7 +13,7 @@ type EventType = {
   duration: number;
   status: number;
   responseOK: boolean;
-  json: unknown;
+  json: string[] | null;
 };
 
 function App() {
