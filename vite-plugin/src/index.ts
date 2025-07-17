@@ -1,8 +1,5 @@
 import { Plugin } from 'vite';
-// import fs from 'fs';
 import path from 'path';
-//import babel from '@rollup/plugin-babel';
-// import { retrieveFetchData } from '../runtime/retrieveFetchData';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
 
@@ -23,17 +20,14 @@ export function fetchPlugin(): Plugin {
       }
     },
 
-    //https://rollupjs.org/plugin-development/#transform
-
     async transform(code, id) {
-      // console.log('[plugin] transforming received:', id);
       // ignore all files that don't end in .js .jsx .ts .tsx
       //or have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveFetchData') ||
         id.includes('retrieveFetchData.ts') ||
-        id.includes('retrieveFetchData.js') || // add this
+        id.includes('retrieveFetchData.js') || 
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
@@ -49,7 +43,7 @@ export function fetchPlugin(): Plugin {
         (await import('@babel/plugin-syntax-typescript')).default,
         { isTSX: true },
       ];
-      console.log(`***[plugin] transforming file: ${id}`);
+
       const result = await babel.transformAsync(code, {
         filename: id,
         plugins: [jsxSyntax, ...[tsSyntax], renameFetch],
@@ -57,16 +51,12 @@ export function fetchPlugin(): Plugin {
         configFile: false,
         parserOpts: {
           sourceType: 'module',
-          plugins: ['jsx', 'typescript'], //added when wouldnt work for typescript in fetchEvents
+          plugins: ['jsx', 'typescript'], 
         },
       });
-      // console.log('*this is the result.code', result.code);
+  
       // Return the transformed code and map (if available)
       if (result && result.code) {
-        // console.log(
-        //   '********** code transformed in some way!!!! from index ',
-        //   result.code
-        // );
         return {
           code: result.code,
           map: result.map || null,
@@ -75,7 +65,6 @@ export function fetchPlugin(): Plugin {
       return null;
     },
 
-    //https://vite.dev/guide/api-plugin.html#configresolved
     configResolved(config) {
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active

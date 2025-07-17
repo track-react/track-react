@@ -27,12 +27,19 @@ type TimelineProps = {
 
 function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el) => {
+    const color = el.responseOK ? 'rgb(33, 150, 243)' : '#fc4040';
     return (
       <VerticalTimelineElement
         className='vertical-timeline-element--work'
-        contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        contentStyle={{
+          background: color,
+          color: '#fff',
+        }}
+        contentArrowStyle={{ borderRight: '7px solid', color }}
+        iconStyle={{
+          background: color,
+          color: '#fff',
+        }}
         icon={<StarPurple500 />}
       >
         <h3 className=''>Source: {el.source}</h3>
@@ -41,7 +48,7 @@ function Timeline({ events }: TimelineProps) {
         <h4>URL: {el.url}</h4>
         <h4>Start: {el.start}</h4>
         <h4>Duration: {el.duration}</h4>
-        <h4>Status: {el.status}</h4>
+        <h4>Status: {el.status ? el.status : 'n/a'}</h4>
         <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
         <h4>JSON: {JSON.stringify(el.json)}</h4>
         <button className='mini ui button'>More Info</button>
