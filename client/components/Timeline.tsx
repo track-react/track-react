@@ -26,10 +26,19 @@ type TimelineProps = {
 };
 
 function Timeline({ events }: TimelineProps) {
-  const verticalTimelineElements = events.map((el) => {
+  const verticalTimelineElements = events.map((el, i) => {
     const color = el.responseOK ? 'rgb(33, 150, 243)' : '#fc4040';
+    const maxLength = 200;
+
+    let jsonString = JSON.stringify(el.json);
+    if (JSON.stringify(el.json).length > maxLength) {
+      jsonString = jsonString.substring(0, maxLength);
+    }
+
+    // const jsonString = JSON.stringify(el.json)
     return (
       <VerticalTimelineElement
+        key={`${el.url}-${i}`}
         className='vertical-timeline-element--work'
         contentStyle={{
           background: color,
@@ -44,17 +53,21 @@ function Timeline({ events }: TimelineProps) {
       >
         <h3 className=''>Source: {el.source}</h3>
         <h4 className=''>Type: {el.type}</h4>
-        <h4>HTTP Method: {el.method}</h4>
-        <h4>URL: {el.url}</h4>
+        <h4>HTTP Method: {el.method }</h4>
+        <h4 style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+          URL: {el.url}
+        </h4>
         <h4>Start: {el.start}</h4>
-        <h4>Duration: {el.duration}</h4>
+        <h4>Duration: {el.duration} ms</h4>
         <h4>Status: {el.status ? el.status : 'n/a'}</h4>
         <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
-        <h4>JSON: {JSON.stringify(el.json)}</h4>
+        <h4 style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+          JSON: {jsonString}
+        </h4>
         <button className='mini ui button'>More Info</button>
         <button
           className='mini ui button'
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: '10px', marginBottom: '10px' }}
         >
           Ask AI
         </button>

@@ -1,6 +1,8 @@
+
 import './App.css';
-import '../vite-plugin/runtime/retrieveFetchData.ts';
-import { useEffect } from 'react';
+// import { retrieveFetchData } from '../vite-plugin/runtime/retrieveFetchData.ts';
+//@ts-expect-error
+import { useEffect, useCallback } from 'react';
 //import { useRef } from 'react';
 import Timeline from './components/Timeline.tsx';
 import { useState } from 'react';
@@ -71,7 +73,7 @@ function App() {
 
   return (
     <>
-      <div>React-Events!</div>
+      {/* <div>React-Events!</div> */}
       <Timeline events={events} />
     </>
   );
