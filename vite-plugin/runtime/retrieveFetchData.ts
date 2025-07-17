@@ -51,7 +51,7 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
     json = null;
   }
   console.log('fetch transformed from retrieveFetchData:');
-  console.log('retrieveFetchDataUrl', retrieveFetchDataUrl);
+  console.log('retrieveFetchDataUrl', url);
   console.log('json', json);
   //setTimeout(() => {
   window.postMessage(
