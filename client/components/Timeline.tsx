@@ -43,7 +43,7 @@ function Timeline({ events }: TimelineProps) {
         <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
         <h4>JSON: {JSON.stringify(el.json)}</h4>
         <button className='mini ui button'>More Info</button>
-        <button className='mini ui button'>Ask AI</button>
+        <button className='mini ui button' style={{ marginLeft: '10px' }}>Ask AI</button>
       </VerticalTimelineElement>
     );
   });
