@@ -10,12 +10,13 @@ import { useState } from 'react';
 type EventType = {
   source: string;
   type: string;
+  method: string;
   url: string;
   start: number;
   duration: number;
   status: number;
   responseOK: boolean;
-  json: unknown;
+  json: unknown; //string[] | null;
 };
 
 function App() {
@@ -50,12 +51,13 @@ function App() {
 
     port.onMessage.addListener((message) => {
       console.log('✅ Message received in React panel:', message);
-
+      console.log(' TYPE OF JSON: ', typeof message.json);
       setEvents((prev) => [
         ...prev,
         {
           source: message.source,
           type: message.type,
+          method: message.method,
           url: message.url,
           start: message.start,
           duration: message.duration,
