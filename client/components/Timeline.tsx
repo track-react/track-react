@@ -27,7 +27,7 @@ function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el, i) => {
     const isSuccess = el.responseOK;
     console.log('Http METHOD!!!!', el.method);
-    let jsonString = JSON.stringify(el.json);
+    const jsonString = JSON.stringify(el.json);
 
     // Helper function to truncate long strings for grid display
     const truncateText = (text: string | number, maxLen: number = 30) => {
