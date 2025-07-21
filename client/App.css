@@ -1,43 +1,332 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* DevTools-style Timeline - Updated for text overflow handling */
+.devtools-timeline-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 12px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.devtools-element {
+  font-family: Consolas, Monaco, 'Courier New', monospace !important;
+  font-size: 10px !important;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.devtools-content {
+  background: #ffffff !important;
+  color: #202124 !important;
+  border-radius: 3px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  font-family: Consolas, Monaco, 'Courier New', monospace !important;
+  font-size: 10px !important;
+  padding: 8px 12px !important;
+  max-width: 300px !important;
+  min-width: 200px !important;
+  overflow: hidden !important;
+}
+
+.devtools-content-success {
+  border: 1px solid #4caf50 !important;
+}
+
+.devtools-content-error {
+  border: 1px solid #f44336 !important;
+}
+
+.devtools-header {
+  margin: -8px -12px 6px -12px;
+  padding: 6px 12px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #5f6368;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.2;
+}
+
+.devtools-header-success {
+  background-color: #e8f5e8;
+  border-bottom: 1px solid #4caf50;
+}
+
+.devtools-header-error {
+  background-color: #ffebee;
+  border-bottom: 1px solid #f44336;
+}
+
+.devtools-method {
+  font-weight: bold;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.devtools-method-success {
+  color: #4caf50;
+}
+
+.devtools-method-error {
+  color: #f44336;
+}
+
+.devtools-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 2px 8px;
+  font-size: 9px;
+  line-height: 12px;
+  overflow: hidden;
+}
+
+.devtools-grid > span {
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.devtools-label {
+  color: #5f6368;
+  font-weight: 500;
+  font-size: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.devtools-status-success {
+  color: #137333;
+  font-weight: 500;
+}
+
+.devtools-status-error {
+  color: #d93025;
+  font-weight: 500;
+}
+
+.devtools-json-summary {
+  cursor: pointer;
+  color: #1976d2;
+  font-size: 9px;
+  font-weight: 500;
+  margin-top: 6px;
+  overflow: visible;
+  max-width: none;
+}
+
+.devtools-json-summary summary {
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.devtools-json-summary[open] {
+  overflow: visible;
+}
+
+.devtools-json-content {
+  background-color: #f8f9fa;
+  border: 1px solid #e8eaed;
+  border-radius: 3px;
+  padding: 8px;
+  margin: 6px 0;
+  font-size: 8px;
+  overflow: auto;
+  max-height: 300px;
+  min-height: 60px;
+  color: #202124;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  line-height: 1.4;
+  resize: vertical;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+}
+
+.devtools-json-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.devtools-json-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.devtools-json-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.devtools-json-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.devtools-button-container {
+  margin-top: 8px;
+  border-top: 1px solid #e8eaed;
+  padding-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.devtools-icon-success {
+  background: transparent !important;
+  color: #4caf50 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.devtools-icon-error {
+  background: transparent !important;
+  color: #f44336 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+/* Custom button styles for DevTools look - smaller */
+.ui.button.devtools-secondary {
+  background-color: #f8f9fa !important;
+  border: 1px solid #dadce0 !important;
+  color: #3c4043 !important;
+  font-size: 9px !important;
+  padding: 3px 6px !important;
+  min-height: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.ui.button.devtools-primary {
+  background-color: #1976d2 !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  padding: 3px 6px !important;
+  min-height: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* Override react-vertical-timeline-component styles for responsive elements */
+.vertical-timeline-element-content {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-left: 40px !important;
+  margin-right: 0 !important;
+  width: auto !important;
+  max-width: 300px !important;
+  float: none !important;
+  clear: none !important;
+  overflow: visible !important;
+}
+
+.vertical-timeline-element-content-arrow {
+  display: none !important;
+}
+
+.vertical-timeline::before {
+  background: #e8eaed !important;
+  width: 2px !important;
+  left: 15px !important;
+}
+
+.vertical-timeline-element-icon {
+  width: 30px !important;
+  height: 30px !important;
+  left: -7px !important;
+  margin-left: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vertical-timeline-element-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Force all timeline elements to align left regardless of even/odd position */
+.vertical-timeline-element {
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.vertical-timeline-element:nth-child(even) .vertical-timeline-element-content {
+  margin-left: 40px !important;
+  margin-right: 0 !important;
+  float: none !important;
+  clear: none !important;
+  text-align: left !important;
+  overflow: visible !important;
+}
+
+.vertical-timeline-element:nth-child(odd) .vertical-timeline-element-content {
+  margin-left: 40px !important;
+  margin-right: 0 !important;
+  float: none !important;
+  clear: none !important;
+  text-align: left !important;
+  overflow: visible !important;
+}
+
+/* Override any default right-side positioning */
+.vertical-timeline-element .vertical-timeline-element-content {
+  position: relative !important;
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure icons stay on the left side */
+.vertical-timeline-element:nth-child(even) .vertical-timeline-element-icon {
+  left: -7px !important;
+  margin-left: 0 !important;
+}
+
+.vertical-timeline-element:nth-child(odd) .vertical-timeline-element-icon {
+  left: -7px !important;
+  margin-left: 0 !important;
+}
+
+/* Responsive adjustments for very narrow screens */
+@media (max-width: 400px) {
+  .devtools-grid {
+    grid-template-columns: 50px 1fr;
+    gap: 1px 6px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .devtools-content {
+    padding: 6px 8px !important;
+    min-width: 150px !important;
+    max-width: 300px !important;
+  }
+
+  .devtools-header {
+    margin: -6px -8px 4px -8px;
+    padding: 4px 8px;
+  }
+
+  .vertical-timeline-element-content {
+    max-width: 300px !important;
+  }
+
+  .devtools-json-content {
+    max-height: 200px;
+    font-size: 7px;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
