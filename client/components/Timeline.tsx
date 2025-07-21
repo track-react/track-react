@@ -3,9 +3,7 @@ import {
   VerticalTimelineElement,
 } from 'react-vertical-timeline-component';
 
-// import WorkIcon from '@mui/icons-material/Work';
-//import SchoolIcon from "@mui/icons-material/School";
-import StarPurple500 from '@mui/icons-material/Star';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import 'react-vertical-timeline-component/style.min.css';
 
@@ -27,58 +25,98 @@ type TimelineProps = {
 
 function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el, i) => {
-    const color = el.responseOK ? 'rgb(33, 150, 243)' : '#fc4040';
-    const maxLength = 200;
-
+    const isSuccess = el.responseOK;
+    console.log('Http METHOD!!!!', el.method);
     let jsonString = JSON.stringify(el.json);
-    if (JSON.stringify(el.json).length > maxLength) {
-      jsonString = jsonString.substring(0, maxLength);
-    }
 
-    // const jsonString = JSON.stringify(el.json)
+    // Helper function to truncate long strings for grid display
+    const truncateText = (text: string | number, maxLen: number = 30) => {
+      const str = String(text);
+      return str.length > maxLen ? str.substring(0, maxLen) + '...' : str;
+    };
+
     return (
       <VerticalTimelineElement
         key={`${el.url}-${i}`}
-        className='vertical-timeline-element--work'
-        contentStyle={{
-          background: color,
-          color: '#fff',
-        }}
-        contentArrowStyle={{ borderRight: '7px solid', color }}
-        iconStyle={{
-          background: color,
-          color: '#fff',
-        }}
-        icon={<StarPurple500 />}
+        className={`vertical-timeline-element--work devtools-element`}
+        contentStyle={{}}
+        contentArrowStyle={{}}
+        iconStyle={{}}
+        iconClassName={
+          isSuccess ? 'devtools-icon-success' : 'devtools-icon-error'
+        }
+        icon={<AccessTimeIcon />}
       >
-        <h3 className=''>Source: {el.source}</h3>
-        <h4 className=''>Type: {el.type}</h4>
-        <h4>HTTP Method: {el.method }</h4>
-        <h4 style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-          URL: {el.url}
-        </h4>
-        <h4>Start: {el.start}</h4>
-        <h4>Duration: {el.duration} ms</h4>
-        <h4>Status: {el.status ? el.status : 'n/a'}</h4>
-        <h4>ResponseOK: {JSON.stringify(el.responseOK)}</h4>
-        <h4 style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-          JSON: {jsonString}
-        </h4>
-        <button className='mini ui button'>More Info</button>
-        <button
-          className='mini ui button'
-          style={{ marginLeft: '10px', marginBottom: '10px' }}
+        <div
+          className={`devtools-content ${
+            isSuccess ? 'devtools-content-success' : 'devtools-content-error'
+          }`}
         >
-          Ask AI
-        </button>
+          <div
+            className={`devtools-header ${
+              isSuccess ? 'devtools-header-success' : 'devtools-header-error'
+            }`}
+          >
+            <span
+              className={`devtools-method ${
+                isSuccess ? 'devtools-method-success' : 'devtools-method-error'
+              }`}
+            >
+              {el.method}
+            </span>{' '}
+            {el.url}
+          </div>
+
+          <div className="devtools-grid">
+            <span className="devtools-label">Source:</span>
+            <span title={el.source}>{truncateText(el.source)}</span>
+
+            <span className="devtools-label">Type:</span>
+            <span title={el.type}>{truncateText(el.type)}</span>
+
+            <span className="devtools-label">Status:</span>
+            <span
+              className={
+                isSuccess ? 'devtools-status-success' : 'devtools-status-error'
+              }
+              title={String(el.status || 'n/a')}
+            >
+              {truncateText(el.status || 'n/a')}
+            </span>
+
+            <span className="devtools-label">Duration:</span>
+            <span title={`${el.duration} ms`}>
+              {truncateText(`${el.duration} ms`)}
+            </span>
+
+            <span className="devtools-label">Start:</span>
+            <span title={String(el.start)}>{truncateText(el.start)}</span>
+          </div>
+
+          {jsonString && (
+            <details className="devtools-json-summary">
+              <summary>Response Data</summary>
+              <pre className="devtools-json-content">{jsonString}</pre>
+            </details>
+          )}
+
+          <div className="devtools-button-container">
+            <button className="mini ui button devtools-secondary">
+              More Info
+            </button>
+            <button className="mini ui button devtools-primary">Ask AI</button>
+          </div>
+        </div>
       </VerticalTimelineElement>
     );
   });
+
   return (
-    <>
-      <VerticalTimeline>{verticalTimelineElements}</VerticalTimeline>
-    </>
+    <div className="devtools-timeline-container">
+      <VerticalTimeline lineColor="#E8EAED">
+        {verticalTimelineElements}
+      </VerticalTimeline>
+    </div>
   );
 }
-
 export default Timeline;
