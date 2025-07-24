@@ -3,6 +3,8 @@ import path from 'path';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
 
+let viteMode = 'development'; // fallback
+
 export function fetchPlugin(): Plugin {
   console.log('*****ENTERING PLUGIN******');
   // Returns a Vite-compatible plugin object
@@ -21,6 +23,10 @@ export function fetchPlugin(): Plugin {
     },
 
     async transform(code, id) {
+      // Skip transformation in production
+      if (viteMode !== 'development') {
+        return null;
+      }
       // ignore all files that don't end in .js .jsx .ts .tsx
       //or have already been transformed
       if (
@@ -66,6 +72,8 @@ export function fetchPlugin(): Plugin {
     },
 
     configResolved(config) {
+      viteMode = config.mode;
+      console.log("config.mode: ", config.mode);
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('ReactEvents plugin active in:', config);
