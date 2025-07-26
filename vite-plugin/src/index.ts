@@ -3,7 +3,7 @@ import path from 'path';
 
 import renameFetch from '../babel-plugins/renameFetch.js';
 
-export function fetchPlugin(): Plugin {
+export function fetchPlugin(): Plugin { 
   console.log('*****ENTERING PLUGIN******');
   // Returns a Vite-compatible plugin object
   // can be imported to vite.config.ts as reactEventsPlugin()
@@ -72,3 +72,7 @@ export function fetchPlugin(): Plugin {
     },
   };
 }
+
+
+
+
