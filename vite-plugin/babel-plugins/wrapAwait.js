@@ -1,4 +1,3 @@
-import * as babel from '@babel/core';
 
 export default function wrapAwait (babel) {
     const { types: t, template } = babel;

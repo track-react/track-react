@@ -13,13 +13,16 @@ type TimelineProps = {
   events: {
     source: string;
     type: string;
-    method: string;
-    url: string;
+    method?: string;
+    url?: string;
     start: number;
     duration: number;
-    status: number;
+    status?: number;
     responseOK: boolean;
-    json: unknown; //string[] | null ;
+    json?: unknown; //string[] | null ;
+    error?: string | null;
+    label?: string;
+    location?: string;
   }[];
 };
 
@@ -67,14 +70,14 @@ function Timeline({ events }: TimelineProps) {
             {el.url}
           </div>
 
-          <div className="devtools-grid">
-            <span className="devtools-label">Source:</span>
+          <div className='devtools-grid'>
+            <span className='devtools-label'>Source:</span>
             <span title={el.source}>{truncateText(el.source)}</span>
 
-            <span className="devtools-label">Type:</span>
+            <span className='devtools-label'>Type:</span>
             <span title={el.type}>{truncateText(el.type)}</span>
 
-            <span className="devtools-label">Status:</span>
+            <span className='devtools-label'>Status:</span>
             <span
               className={
                 isSuccess ? 'devtools-status-success' : 'devtools-status-error'
@@ -84,27 +87,48 @@ function Timeline({ events }: TimelineProps) {
               {truncateText(el.status || 'n/a')}
             </span>
 
-            <span className="devtools-label">Duration:</span>
+            <span className='devtools-label'>Duration:</span>
             <span title={`${el.duration} ms`}>
               {truncateText(`${el.duration} ms`)}
             </span>
 
-            <span className="devtools-label">Start:</span>
+            <span className='devtools-label'>Start:</span>
             <span title={String(el.start)}>{truncateText(el.start)}</span>
-          </div>
+            {el.label && (
+              <>
+                <span className='devtools-label'>Label:</span>
+                <span title={el.label}>{truncateText(el.label)}</span>
+              </>
+            )}
 
+            {el.location && (
+              <>
+                <span className='devtools-label'>Location:</span>
+                <span title={el.location}>{truncateText(el.location)}</span>
+              </>
+            )}
+
+            {el.error && (
+              <>
+                <span className='devtools-label'>Error:</span>
+                <span className='devtools-status-error' title={el.error}>
+                  {truncateText(el.error)}
+                </span>
+              </>
+            )}
+          </div>
           {jsonString && (
-            <details className="devtools-json-summary">
+            <details className='devtools-json-summary'>
               <summary>Response Data</summary>
-              <pre className="devtools-json-content">{jsonString}</pre>
+              <pre className='devtools-json-content'>{jsonString}</pre>
             </details>
           )}
 
-          <div className="devtools-button-container">
-            <button className="mini ui button devtools-secondary">
+          <div className='devtools-button-container'>
+            <button className='mini ui button devtools-secondary'>
               More Info
             </button>
-            <button className="mini ui button devtools-primary">Ask AI</button>
+            <button className='mini ui button devtools-primary'>Ask AI</button>
           </div>
         </div>
       </VerticalTimelineElement>
@@ -112,8 +136,8 @@ function Timeline({ events }: TimelineProps) {
   });
 
   return (
-    <div className="devtools-timeline-container">
-      <VerticalTimeline lineColor="#E8EAED">
+    <div className='devtools-timeline-container'>
+      <VerticalTimeline lineColor='#E8EAED'>
         {verticalTimelineElements}
       </VerticalTimeline>
     </div>
