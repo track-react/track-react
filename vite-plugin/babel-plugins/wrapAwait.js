@@ -1,32 +1,55 @@
+export default function wrapAwait(babel) {
+  const { types: t } = babel;
 
-export default function wrapAwait (babel) {
-    const { types: t, template } = babel;
-    
-    return {
-      name: "Wrapping await calls", 
-      visitor: {
-        AwaitExpression(path, state) { // path is AST, and state is metadata for plugin (including file name, location, etc.)
-          
-          const argPath = path.get('argument');
-          const arg = argPath.node;
-          const label = argPath.getSource() || 'await';
+  console.log('PARKER IS ENTERING WRAPAWAIT');
 
-          // This is assigning each variable a file, line, and column
-          const fileName = state.file.opts.filename || 'unknown';
-          const line = path.node.loc.start.line || 0;
-          const column = path.node.loc.start.column || 0;
-          const location = `${fileName}:${line}:${column}`;
+  function containsRetrieveAwaitData(node) {
+    if (!node) return false;
 
-          path.node.argument = t.callExpression(
-            t.identifier("retrieveAwaitData"), 
-            [
-              arg,
-              t.stringLiteral(label),
-              t.stringLiteral(location),
-            ]
-          );
-        }
+    if (t.isCallExpression(node)) {
+      if (t.isIdentifier(node.callee) && node.callee.name === 'retrieveAwaitData') {
+        return true;
       }
-    };
+      // Recursively check all arguments
+      return node.arguments.some(arg => containsRetrieveAwaitData(arg));
+    }
+
+    return false;
   }
-  
+
+  return {
+    name: "Wrapping await calls",
+    visitor: {
+      AwaitExpression(path, state) {
+        const functionName = path.getFunctionParent()?.node?.id?.name;
+
+        if (functionName === 'retrieveAwaitData') {
+          return; // Avoid infinite loop
+        }
+
+        const argPath = path.get('argument');
+        const arg = argPath.node;
+
+        if (containsRetrieveAwaitData(arg)) {
+          console.log('Found retrieveAwaitData in await argument - skipping wrap');
+          return;
+        }
+
+        const label = argPath.getSource() || 'await';
+        const fileName = state.file.opts.filename || 'unknown';
+        const line = path.node.loc?.start?.line || 0;
+        const column = path.node.loc?.start?.column || 0;
+        const location = `${fileName}:${line}:${column}`;
+
+        path.node.argument = t.callExpression(
+          t.identifier("retrieveAwaitData"),
+          [
+            arg,
+            t.stringLiteral(label),
+            t.stringLiteral(location),
+          ]
+        );
+      }
+    }
+  };
+}

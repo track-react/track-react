@@ -20,9 +20,9 @@ export function awaitPlugin(): Plugin {
     async transform(code, id) {
       if (
         id.includes('node_modules') ||
-        id.includes('retrieveFetchData') ||
-        id.includes('retrieveFetchData.ts') ||
-        id.includes('retrieveFetchData.js') ||
+        id.includes('retrieveAwaitData') ||
+        id.includes('retrieveAwaitData.ts') ||
+        id.includes('retrieveAwaitData.js') ||
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;

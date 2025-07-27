@@ -1,7 +1,6 @@
 
 import './App.css';
 // import { retrieveFetchData } from '../vite-plugin/runtime/retrieveFetchData.ts';
-//@ts-expect-error
 import { useEffect } from 'react';
 //import { useRef } from 'react';
 import Timeline from './components/Timeline.tsx';

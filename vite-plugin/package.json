@@ -12,6 +12,10 @@
     "./retrieveFetchData": {
       "import": "./dist/runtime/retrieveFetchData.js",
       "require": "./dist/runtime/retrieveFetchData.js"
+    },
+    "./retrieveAwaitData": {
+      "import": "./dist/runtime/retrieveAwaitData.js",
+      "require": "./dist/runtime/retrieveAwaitData.js"
     }
   },
   "files": [
