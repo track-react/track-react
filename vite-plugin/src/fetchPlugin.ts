@@ -25,6 +25,9 @@ export function fetchPlugin(): Plugin {
       //or have already been transformed
       if (
         id.includes('node_modules') ||
+        id.includes('retrieveAwaitData') ||
+        id.includes('retrieveAwaitData.ts') ||
+        id.includes('retrieveAwaitData.js') ||
         id.includes('retrieveFetchData') ||
         id.includes('retrieveFetchData.ts') ||
         id.includes('retrieveFetchData.js') || 
