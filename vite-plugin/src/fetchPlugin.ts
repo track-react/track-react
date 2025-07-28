@@ -22,7 +22,7 @@ export function fetchPlugin(): Plugin {
 
     async transform(code, id) {
       // ignore all files that don't end in .js .jsx .ts .tsx
-      //or have already been transformed
+      // or have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||

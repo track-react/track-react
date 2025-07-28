@@ -1,55 +1,36 @@
 export default function wrapAwait(babel) {
+  // destructuring types from babel, and renaming it t
   const { types: t } = babel;
 
-  console.log('PARKER IS ENTERING WRAPAWAIT');
-
-  function containsRetrieveAwaitData(node) {
-    if (!node) return false;
-
-    if (t.isCallExpression(node)) {
-      if (t.isIdentifier(node.callee) && node.callee.name === 'retrieveAwaitData') {
-        return true;
-      }
-      // Recursively check all arguments
-      return node.arguments.some(arg => containsRetrieveAwaitData(arg));
-    }
-
-    return false;
-  }
-
   return {
-    name: "Wrapping await calls",
+    name: 'Wrapping await calls',
     visitor: {
       AwaitExpression(path, state) {
-        const functionName = path.getFunctionParent()?.node?.id?.name;
+        // passing in path for node paths, and the state for extra metadata -- including file name
 
+        // This is checking to see if the parent function is 'retrieveAwaitData' --> therefore we can avoid an infinite loop
+        const functionName = path.getFunctionParent()?.node?.id?.name;
         if (functionName === 'retrieveAwaitData') {
-          return; // Avoid infinite loop
+          return;
         }
 
         const argPath = path.get('argument');
         const arg = argPath.node;
 
-        if (containsRetrieveAwaitData(arg)) {
-          console.log('Found retrieveAwaitData in await argument - skipping wrap');
-          return;
-        }
-
+        // Here we are declaring all the variables that will displayed in the 'location'.
         const label = argPath.getSource() || 'await';
         const fileName = state.file.opts.filename || 'unknown';
         const line = path.node.loc?.start?.line || 0;
         const column = path.node.loc?.start?.column || 0;
         const location = `${fileName}:${line}:${column}`;
 
+        // This is adding a function called 'retrieveAwaitData()' after the AwaitExpression
+        //retrieveAwaitData will accept three parameters --> promise, label, location
         path.node.argument = t.callExpression(
-          t.identifier("retrieveAwaitData"),
-          [
-            arg,
-            t.stringLiteral(label),
-            t.stringLiteral(location),
-          ]
+          t.identifier('retrieveAwaitData'),
+          [arg, t.stringLiteral(label), t.stringLiteral(location)]
         );
-      }
-    }
+      },
+    },
   };
 }
