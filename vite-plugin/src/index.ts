@@ -17,7 +17,7 @@ export default function trackReactPlugins(): Plugin {
       //@ts-expect-error
       awaitP.configResolved?.(config);
     },
-
+    
     resolveId(id, importer, options) {
       return (
         //@ts-expect-error
@@ -34,6 +34,7 @@ export default function trackReactPlugins(): Plugin {
       //@ts-expect-error
       result = await awaitP.transform?.(result?.code ?? code, id, options) ?? result;
       return result;
+
     },
   };
 }
