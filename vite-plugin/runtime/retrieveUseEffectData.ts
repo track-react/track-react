@@ -32,7 +32,7 @@ import { useEffect } from 'react';
  */
 export function retrieveUseEffectData(
   effect: React.EffectCallback,
-  deps?: React.DependencyList,
+  dependecies?: React.DependencyList,
   fileName?: string
 ) {
   console.log('ENTERED retrieve USE EFFECT DATA function');
@@ -52,8 +52,9 @@ export function retrieveUseEffectData(
         start,
         duration,
         hasCleanup: typeof cleanup === 'function',
-        deps,
+        dependecies,
         status: null,
+        location: fileName,
         url: '',
         responseOk: true,
         json: null,
