@@ -7,15 +7,39 @@ export default function renameFetch(babel, ...args) {
   return {
     name: 'Changing fetch to retrieveFetchData',
     visitor: {
+      Program: {
+        enter(path, state) {
+          state.needsImport = false; 
+        }, // traversal happens here
+        exit(path, state) {
+          if (
+            state.needsImport &&
+            !path.scope.hasBinding('retrieveFetchData') // making sure that needsImport is truthy, and retrieveFetchData doesn't already exist
+          ) {
+            // The below logic is to detect if the file is in commonjs.
+            const sourceType =
+              path.node.sourceType ??
+              state.file.ast?.program?.sourceType ??  
+              'module'; // default to ESM
+
+            const useRequire = sourceType === 'script';
+            const importStatement = useRequire
+              ? "const { retrieveFetchData } = require('track-react/retrieveFetchData')"
+              : "import { retrieveFetchData } from 'track-react/retrieveFetchData'";
+
+            const importNode = template.statement(importStatement)();
+            path.unshiftContainer('body', importNode);
+          }
+        },
+      },
       CallExpression(path, state) {
         const callee = path.get('callee');
 
+        // This logic looks for fetch in every way it can be called, and renames it to 'retrieveFetchData'
         if (callee) {
           if (callee.isIdentifier({ name: 'fetch' })) {
-            console.log('replacing normal fetch');
-            //replacing normal fetch call
             callee.replaceWith(t.identifier('retrieveFetchData'));
-            state.needsImport = true;
+            state.needsImport = true; // this will affect our Program logic below, requiring the file to import { retrieveFetchData }
           } else if (callee.isMemberExpression()) {
             const memberObject = callee.get('object');
             const memberProperty = callee.get('property');
@@ -30,31 +54,6 @@ export default function renameFetch(babel, ...args) {
             }
           }
         }
-      },
-      Program: {
-        enter(path, state) {
-          state.needsImport = false;
-        },
-        exit(path, state) {
-          if (
-            state.needsImport &&
-            !path.scope.hasBinding('retrieveFetchData')
-          ) {
-            //! The below logic is to detect if the file is in commonjs. If we decide we definitely want to support CommonJs, mb we should change the tsup to output two plugin versions (chatgpt says that is best practice, but it involves changing a lot of the configurations which im scared to do)
-            const sourceType =
-              path.node.sourceType ??
-              state.file.ast?.program?.sourceType ??
-              'module'; // default to ESM
-
-            const useRequire = sourceType === 'script';
-            const importStatement = useRequire
-              ? "const { retrieveFetchData } = require('vite-plugin-react-events/retrieveFetchData')"
-              : "import { retrieveFetchData } from 'vite-plugin-react-events/retrieveFetchData'";
-
-            const importNode = template.statement(importStatement)();
-            path.unshiftContainer('body', importNode);
-          }
-        },
       },
     },
   };

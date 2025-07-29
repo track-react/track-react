@@ -45,7 +45,7 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
   window.postMessage(
     //sending updated properties to window object
     {
-      source: 'react-events-plugin',
+      source: 'track-react-plugin',
       type: 'fetch-event',
       method, //'fetch-event',
       url,

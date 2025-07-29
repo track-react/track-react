@@ -1,5 +1,5 @@
 {
-  "name": "ReactEvents",
+  "name": "track-react",
   "version": "1.0",
   "manifest_version": 3,
   "description": "Custom DevTools panel using React and Vite",
@@ -17,6 +17,6 @@
   ],
   "permissions": ["scripting"],
   "action": {
-    "default_title": "ReactEvents DevTools"
+    "default_title": "track-react DevTools"
   }
 }
