@@ -2,7 +2,7 @@ import type { Plugin } from 'vite';
 import { fetchPlugin } from './fetchPlugin.js';
 import { awaitPlugin } from './awaitPlugin.js';
 
-export default function trackReactPlugins(): Plugin {
+export default function trackReactPlugin(): Plugin {
   const fetch = fetchPlugin();
   const awaitP = awaitPlugin();
 
