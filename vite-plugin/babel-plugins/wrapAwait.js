@@ -1,3 +1,5 @@
+import template from '@babel/template';
+
 export default function wrapAwait(babel) {
   // destructuring types from babel, and renaming it t
   const { types: t } = babel;
@@ -5,6 +7,31 @@ export default function wrapAwait(babel) {
   return {
     name: 'Wrapping await calls',
     visitor: {
+      Program: {
+        enter(path, state) {
+          state.needsImport = false; 
+        }, // traversal happens here
+        exit(path, state) {
+          if (
+            state.needsImport &&
+            !path.scope.hasBinding('retrieveAwaitData') // making sure that needsImport is truthy, and retrieveAwaitData doesn't already exist
+          ) {
+            // The below logic is to detect if the file is in commonjs.
+            const sourceType =
+              path.node.sourceType ??
+              state.file.ast?.program?.sourceType ??  
+              'module'; // default to ESM
+
+            const useRequire = sourceType === 'script';
+            const importStatement = useRequire
+              ? "const { retrieveAwaitData } = require('track-react/retrieveAwaitData')"
+              : "import { retrieveAwaitData } from 'track-react/retrieveAwaitData'";
+
+            const importNode = template.statement(importStatement)();
+            path.unshiftContainer('body', importNode);
+          }
+        },
+      },
       AwaitExpression(path, state) {
         // passing in path for node paths, and the state for extra metadata -- including file name
 
@@ -13,6 +40,8 @@ export default function wrapAwait(babel) {
         if (functionName === 'retrieveAwaitData') {
           return;
         }
+
+        state.needsImport = true;
 
         const argPath = path.get('argument');
         const arg = argPath.node;

@@ -26,7 +26,7 @@ export function retrieveAwaitData<T>(
 
       window.postMessage(
         {
-          source: 'react-events-plugin',
+          source: 'track-react-plugin',
           type: 'await-event',
           label,
           location,
@@ -51,7 +51,7 @@ export function retrieveAwaitData<T>(
 
     window.postMessage(
       {
-        source: 'react-events-plugin',
+        source: 'track-react-plugin',
         type: 'await-event',
         label,
         location,

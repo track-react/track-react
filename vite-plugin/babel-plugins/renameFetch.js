@@ -24,8 +24,8 @@ export default function renameFetch(babel, ...args) {
 
             const useRequire = sourceType === 'script';
             const importStatement = useRequire
-              ? "const { retrieveFetchData } = require('vite-plugin-react-events/retrieveFetchData')"
-              : "import { retrieveFetchData } from 'vite-plugin-react-events/retrieveFetchData'";
+              ? "const { retrieveFetchData } = require('track-react/retrieveFetchData')"
+              : "import { retrieveFetchData } from 'track-react/retrieveFetchData'";
 
             const importNode = template.statement(importStatement)();
             path.unshiftContainer('body', importNode);

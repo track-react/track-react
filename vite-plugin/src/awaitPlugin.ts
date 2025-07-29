@@ -62,7 +62,7 @@ export function awaitPlugin(): Plugin {
     },
 
     configResolved(config) {
-      console.log('ReactEvents plugin active in: ', config);
+      console.log('track-react plugin active in: ', config);
     },
   };
 }

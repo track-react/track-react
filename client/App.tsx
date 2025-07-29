@@ -25,7 +25,7 @@ function App() {
   const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
-    const port = chrome.runtime.connect({ name: 'react-events-bridge' });
+    const port = chrome.runtime.connect({ name: 'track-react-bridge' });
 
     port.onMessage.addListener((message) => {
       console.log('✅ Message received in React panel:', message);
@@ -54,7 +54,6 @@ function App() {
 
   return (
     <>
-      {/* <div>React-Events!</div> */}
       <Timeline events={events} />
     </>
   );

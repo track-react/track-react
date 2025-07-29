@@ -2,12 +2,12 @@ import type { Plugin } from 'vite';
 import { fetchPlugin } from './fetchPlugin.js';
 import { awaitPlugin } from './awaitPlugin.js';
 
-export default function reactEventsPlugins(): Plugin {
+export default function trackReactPlugins(): Plugin {
   const fetch = fetchPlugin();
   const awaitP = awaitPlugin();
 
   return {
-    name: 'vite-plugin-react-events-container',
+    name: 'vite-plugin-track-react-container',
     enforce: 'pre',
     apply: 'serve',
 

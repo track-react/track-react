@@ -1,7 +1,7 @@
 let devtoolsPort = null;
 
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === 'react-events-bridge') {
+  if (port.name === 'track-react-bridge') {
     devtoolsPort = port;
 
     port.onDisconnect.addListener(() => {

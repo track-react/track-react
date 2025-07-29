@@ -6,7 +6,7 @@ import renameFetch from '../babel-plugins/renameFetch.js';
 export function fetchPlugin(): Plugin { 
   console.log('*****ENTERING PLUGIN******');
   // Returns a Vite-compatible plugin object
-  // can be imported to vite.config.ts as reactEventsPlugin()
+  // can be imported to vite.config.ts as trackReactPlugin()
   return {
     name: 'vite-plugin-fetchPlugin', // plugin name
     enforce: 'pre', // specifies that this plugin will run before all other vite build logic
@@ -71,7 +71,7 @@ export function fetchPlugin(): Plugin {
     configResolved(config) {
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
-      console.log('ReactEvents plugin active in:', config);
+      console.log('track-react plugin active in:', config);
     },
   };
 }
