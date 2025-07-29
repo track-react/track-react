@@ -30,12 +30,38 @@ function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el, i) => {
     const isSuccess = el.responseOK;
     console.log('Http METHOD!!!!', el.method);
-    const jsonString = JSON.stringify(el.json);
+    let jsonString = JSON.stringify(el.json);
 
     // Helper function to truncate long strings for grid display
     const truncateText = (text: string | number, maxLen: number = 30) => {
       const str = String(text);
       return str.length > maxLen ? str.substring(0, maxLen) + '...' : str;
+    };
+
+    // Helper function to render header content based on type
+    const renderHeaderContent = (element: typeof el, success: boolean) => {
+      if (element.type === 'fetch-event') {
+        return (
+          <>
+            <span
+              className={`devtools-method ${
+                success ? 'devtools-method-success' : 'devtools-method-error'
+              }`}
+            >
+              {element.method}
+            </span>{' '}
+            {element.url}
+          </>
+        );
+      }
+      switch (element.type) {
+        case 'await-event':
+          return 'Await-Event';
+        case 'error':
+          return `Error Event: ${element.source}`;
+        default:
+          return `${element.type} Event`;
+      }
     };
 
     return (
@@ -60,14 +86,7 @@ function Timeline({ events }: TimelineProps) {
               isSuccess ? 'devtools-header-success' : 'devtools-header-error'
             }`}
           >
-            <span
-              className={`devtools-method ${
-                isSuccess ? 'devtools-method-success' : 'devtools-method-error'
-              }`}
-            >
-              {el.method}
-            </span>{' '}
-            {el.url}
+            {renderHeaderContent(el, isSuccess)}
           </div>
 
           <div className='devtools-grid'>
@@ -136,8 +155,8 @@ function Timeline({ events }: TimelineProps) {
   });
 
   return (
-    <div className='devtools-timeline-container'>
-      <VerticalTimeline lineColor='#E8EAED'>
+    <div className="devtools-timeline-container">
+      <VerticalTimeline lineColor="#E8EAED">
         {verticalTimelineElements}
       </VerticalTimeline>
     </div>
