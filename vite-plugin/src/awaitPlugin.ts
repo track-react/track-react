@@ -25,7 +25,10 @@ export function awaitPlugin(): Plugin {
         id.includes('retrieveAwaitData.js') ||
         id.includes('retrieveFetchData') ||
         id.includes('retrieveFetchData.ts') ||
-        id.includes('retrieveFetchData.js') || 
+        id.includes('retrieveFetchData.js') ||
+        id.includes('retrieveUseEffectData') ||
+        id.includes('retrieveUseEffectData.ts') ||
+        id.includes('retrieveUseEffectData.js') ||
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
