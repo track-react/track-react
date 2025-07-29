@@ -9,6 +9,7 @@ export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
   } else {
     method = 'GET';
   }
+  
   const start = performance.now();
   let res = null;
   let clone;

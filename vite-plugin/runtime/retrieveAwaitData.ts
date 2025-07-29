@@ -6,6 +6,8 @@ export function retrieveAwaitData<T>(
   console.log('Entering retrieveAwaitData');
   console.log(`Label: ${label}, Location: ${location}`);
 
+  label = label.replace(/^retrieveFetchData(?=\s*\()/, 'fetch');
+
   const start = performance.now();
   let responseOk = true;
   let errorMessage: string | null = null;
