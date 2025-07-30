@@ -1,12 +1,8 @@
 import { Plugin } from 'vite';
 import path from 'path';
-
 import renameFetch from '../babel-plugins/renameFetch.js';
 
-export function fetchPlugin(): Plugin { 
-  console.log('*****ENTERING PLUGIN******');
-  // Returns a Vite-compatible plugin object
-  // can be imported to vite.config.ts as trackReactPlugin()
+export function fetchPlugin(): Plugin {
   return {
     name: 'vite-plugin-fetchPlugin', // plugin name
     enforce: 'pre', // specifies that this plugin will run before all other vite build logic
@@ -14,15 +10,13 @@ export function fetchPlugin(): Plugin {
 
     resolveId(id) {
       // anywhere retrieveFetchData is added -> adding an explicit path
-      // so user can use import { retrieveFetchData } from 'retrieveFetchData' --> creating an alias
       if (id === 'retrieveFetchData') {
         return path.resolve(__dirname, '../runtime/retrieveFetchData.ts');
       }
     },
 
     async transform(code, id) {
-      // ignore all files that don't end in .js .jsx .ts .tsx
-      // or have already been transformed
+      // ignoring files that have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||
@@ -37,9 +31,6 @@ export function fetchPlugin(): Plugin {
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
-      }
-      if (code.includes('fetch(')) {
-        console.log(`[plugin] ${id} contains fetch calls, transforming...`);
       }
 
       // Use Babel to transform the code with the renameFetch plugin
@@ -57,10 +48,10 @@ export function fetchPlugin(): Plugin {
         configFile: false,
         parserOpts: {
           sourceType: 'module',
-          plugins: ['jsx', 'typescript'], 
+          plugins: ['jsx', 'typescript'],
         },
       });
-  
+
       // Return the transformed code and map (if available)
       if (result && result.code) {
         return {
@@ -78,7 +69,3 @@ export function fetchPlugin(): Plugin {
     },
   };
 }
-
-
-
-

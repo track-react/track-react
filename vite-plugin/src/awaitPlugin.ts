@@ -1,10 +1,8 @@
 import { Plugin } from 'vite';
 import path from 'path';
-
 import wrapAwait from '../babel-plugins/wrapAwait.js';
 
 export function awaitPlugin(): Plugin {
-  console.log('*****ENTERING AWAIT PLUGIN*******');
 
   return {
     name: 'vite-plugin-awaitPlugin',
@@ -32,9 +30,6 @@ export function awaitPlugin(): Plugin {
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
-      }
-      if (code.includes('await')) {
-        console.log(`[PLUGIN] ${id} contains await events, transforming...`);
       }
 
       const babel = await import('@babel/core');
@@ -65,6 +60,8 @@ export function awaitPlugin(): Plugin {
     },
 
     configResolved(config) {
+      // This hook runs after Vite has resolved the final config
+      // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('track-react plugin active in: ', config);
     },
   };

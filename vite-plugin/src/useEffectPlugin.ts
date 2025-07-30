@@ -1,22 +1,16 @@
 import { Plugin } from 'vite';
 import path from 'path';
-
 import renameUseEffect from '../babel-plugins/renameUseEffect.js';
 
 let viteMode = 'development'; // fallback
 
 export function useEffectPlugin(): Plugin {
-  console.log('*****ENTERING PLUGIN******');
-  // Returns a Vite-compatible plugin object
-  // can be imported to vite.config.ts as reactEventsPlugin()
   return {
     name: 'vite-plugin-useEffectPlugin', // plugin name
     enforce: 'pre', // specifies that this plugin will run before all other vite build logic
     apply: 'serve', // This ensures the plugin only runs during development
 
     resolveId(id) {
-      // anywhere retrieveFetchData is added -> adding an explicit path
-      // so user can use import { retrieveFetchData } from 'retrieveFetchData' --> creating an alias
       if (id === 'retrieveUseEffectData') {
         return path.resolve(__dirname, '../runtime/retrieveUseEffectData.ts');
       }
@@ -27,8 +21,7 @@ export function useEffectPlugin(): Plugin {
       if (viteMode !== 'development') {
         return null;
       }
-      // ignore all files that don't end in .js .jsx .ts .tsx
-      //or have already been transformed
+      // ignoring files that have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||
@@ -43,9 +36,6 @@ export function useEffectPlugin(): Plugin {
         !/\.(jsx?|tsx?)$/.test(id)
       ) {
         return null;
-      }
-      if (code.includes('useEffect(')) {
-        console.log(`[plugin] ${id} contains useEffect calls, transforming...`);
       }
 
       // Use Babel to transform the code with the renameUseEffect plugin
@@ -79,7 +69,6 @@ export function useEffectPlugin(): Plugin {
 
     configResolved(config) {
       viteMode = config.mode;
-      console.log('config.mode: ', config.mode);
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('track-react plugin active in:', config);
