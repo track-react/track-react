@@ -5,7 +5,12 @@ import esbuild from 'esbuild';
 
 export default defineConfig({
   // ① what to bundle
-  entry: ['src/index.ts'],
+  entry: [
+    'src/index.ts',
+    'src/fetchPlugin.ts',
+    'src/awaitPlugin.ts',
+    'src/useEffectPlugin.ts',
+  ],
 
   // ② output formats
   format: ['esm', 'cjs'],
@@ -24,20 +29,25 @@ export default defineConfig({
   ],
   tsconfig: 'tsconfig.json',
 
-  // ⑥ run after build succeeds
+  //⑥ run after build succeeds
   async onSuccess() {
-    const src = path.resolve('runtime/retrieveFetchData.ts');
+    const files = ['retrieveFetchData.ts', 'retrieveAwaitData.ts','retrieveUseEffectData.ts'];
+    const srcDir = path.resolve('runtime');
     const destDir = path.resolve('dist/runtime');
-    const dest = path.join(destDir, 'retrieveFetchData.js');
     fs.mkdirSync(destDir, { recursive: true });
 
-    // compile TypeScript → JS (keeps modern syntax, strips types)
-    const { code } = esbuild.transformSync(fs.readFileSync(src, 'utf8'), {
-      loader: 'ts',
-      format: 'esm',
-      target: 'es2020',
-    });
-    fs.writeFileSync(dest, code);
-    console.log('transpiled retrieveFetchData → dist/runtime ✅');
+    for (const file of files) {
+      const src = path.join(srcDir, file);
+      const dest = path.join(destDir, file.replace('.ts', '.js'));
+
+      const { code } = esbuild.transformSync(fs.readFileSync(src, 'utf8'), {
+        loader: 'ts',
+        format: 'esm',
+        target: 'es2020',
+      });
+
+      fs.writeFileSync(dest, code);
+      console.log(`transpiled ${file} → dist/runtime ✅`);
+    }
   },
 });

@@ -1,144 +1,56 @@
-// This file must be imported somewhere in the user’s code (or injected automatically by your plugin if possible).
-console.log('is this getting run');
+export async function retrieveFetchData(
+  ...args: [...Parameters<typeof fetch>, string, string] // fetch args + label + location
+): Promise<Response | null> {
+  // Pop off the last two args (added by the Babel plugin)
+  const location = args.pop();
+  const label = args.pop();
 
-// setTimeout(() => {
-//   window.postMessage(
-//     {
-//       retrieveFetchDataSource: 'react-events-devtool',
-//       retrieveFetchDataType: 'fetch-event',
-//       retrieveFetchDataUrl: 'www.parker.com',
-//       retrieveFetchDataStart: '0020',
-//       retrieveFetchDataDuration: '0020',
-//       retrieveFetchDataResponseStatus: 200,
-//       retrieveFetchDataResponseOk: 'ok',
-//       json: [{ prop: 'stuff' }],
-//     },
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'useEffect',
-//     //   retrieveFetchDataUrl: 'www.emily.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
-//     // },
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'useCallback',
-//     //   retrieveFetchDataUrl: 'www.pedro.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
-//     // },
-//     '*'
-//   );
-// }, 1000);
+  const url = args[0];
+  const method = args[1]?.method ?? 'GET';
 
-// setTimeout(() => {
-//   window.postMessage(
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'fetch-event',
-//     //   retrieveFetchDataUrl: 'www.parker.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff' }],
-//     // },
-//     {
-//       retrieveFetchDataSource: 'react-events-devtool',
-//       retrieveFetchDataType: 'useEffect',
-//       retrieveFetchDataUrl: 'www.emily.com',
-//       retrieveFetchDataStart: '0020',
-//       retrieveFetchDataDuration: '0020',
-//       retrieveFetchDataResponseStatus: 200,
-//       retrieveFetchDataResponseOk: 'ok',
-//       json: [{ prop: 'stuff' }],
-//     },
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'useCallback',
-//     //   retrieveFetchDataUrl: 'www.pedro.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
-//     // },
-//     '*'
-//   );
-// }, 1000);
-// setTimeout(() => {
-//   window.postMessage(
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'fetch-event',
-//     //   retrieveFetchDataUrl: 'www.parker.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff' }],
-//     // },
-//     // {
-//     //   retrieveFetchDataSource: 'react-events-devtool',
-//     //   retrieveFetchDataType: 'useEffect',
-//     //   retrieveFetchDataUrl: 'www.emily.com',
-//     //   retrieveFetchDataStart: '0020',
-//     //   retrieveFetchDataDuration: '0020',
-//     //   retrieveFetchDataResponseStatus: 200,
-//     //   retrieveFetchDataResponseOk: 'ok',
-//     //   retrieveFetchDataJson: [{ prop: 'stuff'}]
-//     // },
-//     {
-//       retrieveFetchDataSource: 'react-events-devtool',
-//       retrieveFetchDataType: 'useCallback',
-//       retrieveFetchDataUrl: 'www.pedro.com',
-//       retrieveFetchDataStart: '0020',
-//       retrieveFetchDataDuration: '0020',
-//       retrieveFetchDataResponseStatus: 200,
-//       retrieveFetchDataResponseOk: 'ok',
-//       json: [{ prop: 'stuff' }],
-//     },
-//     '*'
-//   );
-// }, 1000);
+  const start = performance.now();
+  let res = null;
+  let clone;
+  let status;
+  let responseOk;
 
-export async function retrieveFetchData(...args: Parameters<typeof fetch>) {
-  console.log('retrieveFetchData called with args:', args);
-  const retrieveFetchDataStart = performance.now();
-  const retrieveFetchDataResponse = await fetch(...args);
-  const retrieveFetchDataDuration = performance.now() - retrieveFetchDataStart;
-  const retrieveFetchDataCloned = retrieveFetchDataResponse.clone();
-  const retrieveFetchDataUrl = retrieveFetchDataResponse.url;
+  try {
+    res = await fetch(...args);
+    clone = res.clone();
+    status = res.status;
+    responseOk = res.ok;
+  } catch (e) {
+    console.log('[ERROR] retrieveFetchData error', e);
+    responseOk = false;
+    status = e?.status ?? null;
+  }
+
+  const duration = performance.now() - start;
+
   let json;
   try {
-    json = await retrieveFetchDataCloned.json();
+    json = clone ? await clone.json() : null;
   } catch (e) {
-    console.log('error from json try/catch', e);
+    console.log('[ERROR] parsing JSON in retrieveFetchData:', e);
     json = null;
   }
-  console.log('fetch transformed from retrieveFetchData:');
-  console.log('retrieveFetchDataUrl', retrieveFetchDataUrl);
-  console.log('json', json);
-  //setTimeout(() => {
+
   window.postMessage(
     {
-      retrieveFetchDataSource: 'react-events-devtool',
-      retrieveFetchDataType: 'fetch-event',
-      retrieveFetchDataUrl,
-      retrieveFetchDataStart,
-      retrieveFetchDataDuration,
-      retrieveFetchDataResponseStatus: retrieveFetchDataResponse.status,
-      retrieveFetchDataResponseOk: retrieveFetchDataResponse.ok,
+      source: 'track-react-plugin',
+      type: 'fetch-event',
+      method,
+      url,
+      start,
+      duration,
+      status,
+      responseOk,
       json,
+      label,
+      location,
     },
     '*'
   );
-  return retrieveFetchDataResponse;
-  //} 1000);
+
+  return res;
 }

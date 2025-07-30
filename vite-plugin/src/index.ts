@@ -1,75 +1,79 @@
-import { Plugin } from 'vite';
-// import fs from 'fs';
-import path from 'path';
-import babel from '@rollup/plugin-babel'
-// import { retrieveFetchData } from '../runtime/retrieveFetchData';
+/* eslint-disable react-hooks/rules-of-hooks */
+import type { Plugin, ResolvedConfig } from 'vite';
+import { fetchPlugin } from './fetchPlugin.js';
+import { awaitPlugin } from './awaitPlugin.js';
+import { useEffectPlugin } from './useEffectPlugin.js';
+export default function trackReactPlugin(): Plugin {
+  const fetch = fetchPlugin();
+  const awaitP = awaitPlugin();
+  const useEffect = useEffectPlugin();
 
-import renameFetch from '../babel-plugins/renameFetch.js';
-
-export function fetchPlugin(): Plugin {
-  console.log('*****ENTERING PLUGIN******');
-  // Returns a Vite-compatible plugin object
-  // can be imported to vite.config.ts as reactEventsPlugin()
   return {
-    name: 'vite-plugin-fetchPlugin', // plugin name
-    enforce: 'pre', // specifies that this plugin will run before all other vite build logic
-    apply: 'serve', // This ensures the plugin only runs during development
+    name: 'vite-plugin-track-react-container',
+    enforce: 'pre',
+    apply: 'serve',
 
-    resolveId(id) {
-      // anywhere retrieveFetchData is added -> adding an explicit path
-      // so user can use import { retrieveFetchData } from 'retrieveFetchData' --> creating an alias
-      if (id === 'retrieveFetchData') {
-        return path.resolve(__dirname, '../runtime/retrieveFetchData.ts');
-      }
-    },
-
-    //https://rollupjs.org/plugin-development/#transform
-    async transform(code, id) {
-      console.log('[plugin] transforming received:', id);
-      // ignore all files that don't end in .js .jsx .ts .tsx
-      //or have already been transformed
-      if (
-        id.includes('node_modules') ||
-        id.includes('retrieveFetchData.ts') ||
-        id.includes('retrieveFetchData.js') ||  // add this
-        !/\.(jsx?|tsx?)$/.test(id)
-      ) {
-        return null;
-      }
-      if (code.includes('fetch(')) {
-        console.log(`[plugin] ${id} contains fetch calls, transforming...`)
-      }
-      
-
-      // Use Babel to transform the code with the renameFetch plugin
-      const babel = await import('@babel/core');
-      const jsxSyntax = (await import('@babel/plugin-syntax-jsx')).default;
-      const result = await babel.transformAsync(code, {
-        filename: id,
-        plugins: [jsxSyntax, renameFetch],
-        sourceMaps: true,
-        configFile: false,
-      });
-      console.log('*this is the result.code', result.code)
-      // Return the transformed code and map (if available)
-      if (result && result.code) {
-        console.log(
-          '********** code transformed in some way!!!! from index ',
-          result.code
-        );
-        return {
-          code: result.code,
-          map: result.map || null,
-        };
-      }
-      return null;
-    },
-
-    //https://vite.dev/guide/api-plugin.html#configresolved
     configResolved(config) {
-      // This hook runs after Vite has resolved the final config
-      // Logs the current mode (development, production, etc.), confirming the plugin is active
-      console.log('ReactEvents plugin active in:', config);
+      // Helper function to safely call configResolved method
+      const callConfigResolved = (plugin: Plugin, config: ResolvedConfig) => {
+        if (!plugin.configResolved) return;
+        
+        if (typeof plugin.configResolved === 'function') {
+          plugin.configResolved.call(this, config);
+        } else if (plugin.configResolved.handler) {
+          plugin.configResolved.handler.call(this, config);
+        }
+      };
+
+      callConfigResolved(fetch, config);
+      callConfigResolved(awaitP, config);
+      callConfigResolved(useEffect, config);
+    },
+
+    resolveId(id, importer, options) {
+      // Helper function to safely call resolveId method
+      const callResolveId = (plugin: Plugin, id: string, importer?: string, options?: { ssr?: boolean }) => {
+        if (!plugin.resolveId) return null;
+        
+        if (typeof plugin.resolveId === 'function') {
+          return plugin.resolveId.call(this, id, importer, options);
+        } else if (plugin.resolveId.handler) {
+          return plugin.resolveId.handler.call(this, id, importer, options);
+        }
+        return null;
+      };
+
+      return (
+        callResolveId(fetch, id, importer, options) ??
+        callResolveId(awaitP, id, importer, options) ??
+        callResolveId(useEffect, id, importer, options) ??
+        null
+      );
+    },
+
+    async transform(code, id, options) {
+      // Helper function to safely call transform method
+      const callTransform = async (plugin: Plugin, code: string, id: string, options?: { ssr?: boolean }) => {
+        if (!plugin.transform) return null;
+        
+        // Handle both function and ObjectHook formats
+        if (typeof plugin.transform === 'function') {
+          return await plugin.transform.call(this, code, id, options);
+        } else if (plugin.transform.handler) {
+          return await plugin.transform.handler.call(this, code, id, options);
+        }
+        return null;
+      };
+
+      let result = await callTransform(fetch, code, id, options);
+
+      result =
+        (await callTransform(awaitP, result?.code ?? code, id, options)) ?? result;
+
+      result =
+        (await callTransform(useEffect, result?.code ?? code, id, options)) ?? result;
+        
+      return result;
     },
   };
 }

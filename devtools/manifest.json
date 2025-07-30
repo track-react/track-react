@@ -1,15 +1,22 @@
 {
-    "name": "ReactEvents",
-    "version": "1.0",
-    "manifest_version": 3,
-    "description": "Custom DevTools panel using React and Vite",
-    "devtools_page": "./devtools.html",
-    "background": {
-      "service_worker": "background.js"
-    },
-    "permissions": [],
-    "action": {
-      "default_title": "ReactEvents DevTools"
+  "name": "track-react",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Custom DevTools panel using React and Vite",
+  "devtools_page": "./devtools.html",
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ],
+  "permissions": ["scripting"],
+  "action": {
+    "default_title": "track-react DevTools"
   }
-  
+}
