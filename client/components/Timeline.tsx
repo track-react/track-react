@@ -31,15 +31,22 @@ type TimelineProps = {
 function Timeline({ events }: TimelineProps) {
   const verticalTimelineElements = events.map((el, i) => {
     const isSuccess = el.responseOK;
-    console.log('Http METHOD!!!!', el.method);
+    const isUseEffect = el.type === 'useEffect';
     const jsonString = JSON.stringify(el.json);
+
+    // Determine the style variant
+    const getStyleVariant = () => {
+      if (isUseEffect) return 'useeffect';
+      return isSuccess ? 'success' : 'error';
+    };
+
+    const styleVariant = getStyleVariant();
 
     // Helper function to truncate long strings for grid display
     const truncateText = (text: string | number, maxLen: number = 30) => {
       const str = String(text);
       return str.length > maxLen ? str.substring(0, maxLen) + '...' : str;
     };
-    console.log('****DEPENDENCY LENGTH', el.dependencies?.toString().length);
     // Helper function to render header content based on type
     const renderHeaderContent = (element: typeof el, success: boolean) => {
       if (element.type === 'fetch-event') {
@@ -75,21 +82,11 @@ function Timeline({ events }: TimelineProps) {
         contentStyle={{}}
         contentArrowStyle={{}}
         iconStyle={{}}
-        iconClassName={
-          isSuccess ? 'devtools-icon-success' : 'devtools-icon-error'
-        }
+        iconClassName={`devtools-icon-${styleVariant}`}
         icon={<AccessTimeIcon />}
       >
-        <div
-          className={`devtools-content ${
-            isSuccess ? 'devtools-content-success' : 'devtools-content-error'
-          }`}
-        >
-          <div
-            className={`devtools-header ${
-              isSuccess ? 'devtools-header-success' : 'devtools-header-error'
-            }`}
-          >
+        <div className={`devtools-content devtools-content-${styleVariant}`}>
+          <div className={`devtools-header devtools-header-${styleVariant}`}>
             {renderHeaderContent(el, isSuccess)}
           </div>
 
@@ -102,9 +99,7 @@ function Timeline({ events }: TimelineProps) {
 
             <span className='devtools-label'>Status:</span>
             <span
-              className={
-                isSuccess ? 'devtools-status-success' : 'devtools-status-error'
-              }
+              className={`devtools-status-${styleVariant}`}
               title={String(el.status || 'n/a')}
             >
               {truncateText(el.status || 'n/a')}
