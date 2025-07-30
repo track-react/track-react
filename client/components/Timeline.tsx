@@ -153,8 +153,10 @@ function Timeline({ events }: TimelineProps) {
               </details>
             ) : (
               <>
-                <span className='devtools-label'>Dependencies:</span>
-                <span title='dependencies'>{el.dependencies}</span>
+                <div className='devtools-grid'>
+                  <span className='devtools-label'>Dependencies:</span>
+                  <span title='dependencies'>{el.dependencies}</span>
+                </div>
               </>
             ))}
           {jsonString && (

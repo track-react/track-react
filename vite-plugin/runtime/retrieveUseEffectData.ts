@@ -35,8 +35,6 @@ export function retrieveUseEffectData(
   dependencies?: React.DependencyList | string,
   fileName?: string
 ) {
-
-  
   console.log('ENTERED retrieve USE EFFECT DATA function');
   console.log('DEPENDENCIES', dependencies);
   console.log('TYPE OF DEPENDENCIES', typeof dependencies);
@@ -52,19 +50,21 @@ export function retrieveUseEffectData(
       const duration = performance.now() - start;
 
       //?maybe we add a payload key to put the method specific information?
-      setTimeout(() => { window.postMessage(
-        {
-          source: 'track-react-plugin',
-          type: 'useEffect',
-          start,
-          duration,
-          hasCleanup: typeof cleanup === 'function',
-          dependencies: 'No dependencies',
-          location: fileName,
-          responseOk: true,
-        },
-        '*'
-      )}, 1);
+      setTimeout(() => {
+        window.postMessage(
+          {
+            source: 'track-react-plugin',
+            type: 'useEffect',
+            start,
+            duration,
+            hasCleanup: typeof cleanup === 'function',
+            dependencies: 'No dependencies',
+            location: fileName,
+            responseOk: true,
+          },
+          '*'
+        );
+      }, 1000);
       return cleanup;
     });
   } else {
@@ -75,19 +75,21 @@ export function retrieveUseEffectData(
 
       const duration = performance.now() - start;
       //?maybe we add a payload key to put the method specific information?
-      setTimeout(() => { window.postMessage(
-        {
-          source: 'track-react-plugin',
-          type: 'useEffect',
-          start,
-          duration,
-          hasCleanup: typeof cleanup === 'function',
-          dependencies: dependencies.length === 0 ? '[ ]' : dependencies, //to make devTool print '[]'
-          location: fileName,
-          responseOk: true,
-        },
-        '*'
-      )}, 1);
+      setTimeout(() => {
+        window.postMessage(
+          {
+            source: 'track-react-plugin',
+            type: 'useEffect',
+            start,
+            duration,
+            hasCleanup: typeof cleanup === 'function',
+            dependencies: dependencies.length === 0 ? '[ ]' : dependencies, //to make devTool print '[]'
+            location: fileName,
+            responseOk: true,
+          },
+          '*'
+        );
+      }, 1000);
       return cleanup;
     }, dependencies);
   }
