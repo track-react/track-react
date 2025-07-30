@@ -32,10 +32,11 @@ import { useEffect } from 'react';
  */
 export function retrieveUseEffectData(
   effect: React.EffectCallback,
-  dependecies?: React.DependencyList,
+  dependencies?: React.DependencyList,
   fileName?: string
 ) {
   console.log('ENTERED retrieve USE EFFECT DATA function');
+  console.log('DEPENDENCIES', dependencies);
   useEffect(() => {
     const start = performance.now();
 
@@ -47,17 +48,17 @@ export function retrieveUseEffectData(
       {
         source: 'track-react-plugin',
         type: 'useEffect',
-        method: 'useEffect',
-        fileName,
+        // method: 'useEffect',
+        //fileName,
         start,
         duration,
         hasCleanup: typeof cleanup === 'function',
-        dependecies,
-        status: null,
+        dependencies,
+        //status: null,
         location: fileName,
-        url: '',
+        //url: '',
         responseOk: true,
-        json: null,
+        //json: null,
       },
       '*'
     );
@@ -73,5 +74,5 @@ export function retrieveUseEffectData(
     // json: json,
 
     return cleanup;
-  }, deps);
+  }, dependencies);
 }

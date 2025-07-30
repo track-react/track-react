@@ -1,4 +1,3 @@
-
 import './App.css';
 // import { retrieveFetchData } from '../vite-plugin/runtime/retrieveFetchData.ts';
 import { useEffect } from 'react';
@@ -19,6 +18,8 @@ type EventType = {
   error?: string | null;
   label?: string;
   location?: string;
+  dependencies?: [];
+  hasCleanup?: boolean;
 };
 
 function App() {
@@ -45,6 +46,8 @@ function App() {
           error: message.error,
           label: message.label,
           location: message.location,
+          dependencies: message.dependencies,
+          hasCleanup: message.hasCleanup,
         },
       ]);
     });
