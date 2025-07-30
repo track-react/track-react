@@ -3,29 +3,53 @@ export function retrieveAwaitData<T>(
   label = 'await',
   location = 'unknown'
 ): Promise<T> {
-  console.log('Entering retrieveAwaitData');
-  console.log(`Label: ${label}, Location: ${location}`);
-
   label = label.replace(/^retrieveFetchData(?=\s*\()/, 'fetch');
 
   const start = performance.now();
   let responseOk = true;
   let errorMessage: string | null = null;
   if (label.includes('retrieveFetchData')) {
-    label = 'fetch'
+    label = 'fetch';
   }
-  console.log('[retrieveAwaitData] is trying!');
 
-  return promise.then(result => {
-    let safeResultPromise;
+  return promise
+    .then((result) => {
+      let safeResultPromise;
 
-    if (result instanceof Response) {
-      safeResultPromise = result.clone().json().catch(() => null);
-    } else {
-      safeResultPromise = Promise.resolve(result);
-    }
+      if (result instanceof Response) {
+        safeResultPromise = result
+          .clone()
+          .json()
+          .catch(() => null);
+      } else {
+        safeResultPromise = Promise.resolve(result);
+      }
 
-    return safeResultPromise.then(safeResult => {
+      return safeResultPromise.then((safeResult) => {
+        const duration = performance.now() - start;
+
+        window.postMessage(
+          {
+            source: 'track-react-plugin',
+            type: 'await-event',
+            label,
+            location,
+            start,
+            duration,
+            responseOk,
+            error: errorMessage,
+            result: safeResult,
+          },
+          '*'
+        );
+        return result;
+      });
+    })
+    .catch((e) => {
+      console.log('[ERROR] caught in PLUGIN retrieveAwaitData: ', e);
+      responseOk = false;
+      errorMessage = e instanceof Error ? e.message : String(e);
+
       const duration = performance.now() - start;
 
       window.postMessage(
@@ -38,36 +62,11 @@ export function retrieveAwaitData<T>(
           duration,
           responseOk,
           error: errorMessage,
-          result: safeResult,
+          result: null,
         },
         '*'
       );
 
-      return result;
+      return Promise.reject(e);
     });
-  })
-  .catch(e => {
-    console.log('[ERROR] caught in PLUGIN retrieveAwaitData: ', e);
-    responseOk = false;
-    errorMessage = e instanceof Error ? e.message : String(e);
-
-    const duration = performance.now() - start;
-
-    window.postMessage(
-      {
-        source: 'track-react-plugin',
-        type: 'await-event',
-        label,
-        location,
-        start,
-        duration,
-        responseOk,
-        error: errorMessage,
-        result: null,
-      },
-      '*'
-    );
-
-    return Promise.reject(e);
-  });
 }

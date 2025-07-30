@@ -52,8 +52,7 @@ export default function renameFetch(babel) {
           // Get original fetch args
           const args = path.node.arguments;
 
-          // Generate label and location
-          const label = path.getSource(); // raw source text
+          const label = path.getSource(); 
           const filePath = state?.file?.opts?.filename || 'unknown';
           const fileName = filePath.split('/').pop();
           const line = path.node.loc?.start?.line || 0;

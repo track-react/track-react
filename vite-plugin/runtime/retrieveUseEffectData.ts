@@ -1,27 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-// import { useEffect } from "react";
-// export async function retrieveFetchData(...args: Parameters<typeof useEffect>) {
-// const start = performance.now();
-//     console.log(args);
-
-//       window.postMessage(
-//         //sending updated properties to window object
-//         {
-//           source: 'react-events-plugin',
-//           type: 'fetch-event',
-//           method: "", //'fetch-event',
-//           url: "",
-//           start,
-//           duration,
-//           status,
-//           responseOk,
-//           json: json,
-//         },
-//         '*'
-//       );
-//       return res;
-// }
-
 import { useEffect } from 'react';
 
 /**
@@ -35,21 +11,14 @@ export function retrieveUseEffectData(
   dependencies?: React.DependencyList | string,
   fileName?: string
 ) {
-  console.log('ENTERED retrieve USE EFFECT DATA function');
-  console.log('DEPENDENCIES', dependencies);
-  console.log('TYPE OF DEPENDENCIES', typeof dependencies);
-
   if (typeof dependencies != 'object') {
     fileName = dependencies;
-    //dependencies = 'No dependecies';
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const start = performance.now();
-
       const cleanup = effect();
-
       const duration = performance.now() - start;
 
-      //?maybe we add a payload key to put the method specific information?
       setTimeout(() => {
         window.postMessage(
           {
@@ -68,13 +37,13 @@ export function retrieveUseEffectData(
       return cleanup;
     });
   } else {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const start = performance.now();
 
       const cleanup = effect();
 
       const duration = performance.now() - start;
-      //?maybe we add a payload key to put the method specific information?
       setTimeout(() => {
         window.postMessage(
           {
@@ -83,7 +52,7 @@ export function retrieveUseEffectData(
             start,
             duration,
             hasCleanup: typeof cleanup === 'function',
-            dependencies: dependencies.length === 0 ? '[ ]' : dependencies, //to make devTool print '[]'
+            dependencies: dependencies.length === 0 ? '[ ]' : dependencies,
             location: fileName,
             responseOk: true,
           },
@@ -91,6 +60,7 @@ export function retrieveUseEffectData(
         );
       }, 1000);
       return cleanup;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, dependencies);
   }
 }
