@@ -32,47 +32,61 @@ import { useEffect } from 'react';
  */
 export function retrieveUseEffectData(
   effect: React.EffectCallback,
-  dependencies?: React.DependencyList,
+  dependencies?: React.DependencyList | string,
   fileName?: string
 ) {
   console.log('ENTERED retrieve USE EFFECT DATA function');
   console.log('DEPENDENCIES', dependencies);
-  useEffect(() => {
-    const start = performance.now();
+  console.log('TYPE OF DEPENDENCIES', typeof dependencies);
 
-    const cleanup = effect();
+  if (typeof dependencies != 'object') {
+    fileName = dependencies;
+    //dependencies = 'No dependecies';
+    useEffect(() => {
+      const start = performance.now();
 
-    const duration = performance.now() - start;
-    //?maybe we add a payload key to put the method specific information?
-    window.postMessage(
-      {
-        source: 'track-react-plugin',
-        type: 'useEffect',
-        // method: 'useEffect',
-        //fileName,
-        start,
-        duration,
-        hasCleanup: typeof cleanup === 'function',
-        dependencies,
-        //status: null,
-        location: fileName,
-        //url: '',
-        responseOk: true,
-        //json: null,
-      },
-      '*'
-    );
+      const cleanup = effect();
 
-    //     source: 'react-events-plugin',
-    // type: 'fetch-event',
-    // method, //'fetch-event',
-    // url,
-    // start,
-    // duration,
-    // status,
-    // responseOk,
-    // json: json,
+      const duration = performance.now() - start;
 
-    return cleanup;
-  }, dependencies);
+      //?maybe we add a payload key to put the method specific information?
+      window.postMessage(
+        {
+          source: 'track-react-plugin',
+          type: 'useEffect',
+          start,
+          duration,
+          hasCleanup: typeof cleanup === 'function',
+          dependencies: 'No dependencies',
+          location: fileName,
+          responseOk: true,
+        },
+        '*'
+      );
+      return cleanup;
+    });
+  } else {
+    useEffect(() => {
+      const start = performance.now();
+
+      const cleanup = effect();
+
+      const duration = performance.now() - start;
+      //?maybe we add a payload key to put the method specific information?
+      window.postMessage(
+        {
+          source: 'track-react-plugin',
+          type: 'useEffect',
+          start,
+          duration,
+          hasCleanup: typeof cleanup === 'function',
+          dependencies: dependencies.length === 0 ? '[ ]' : dependencies, //to make devTool print '[]'
+          location: fileName,
+          responseOk: true,
+        },
+        '*'
+      );
+      return cleanup;
+    }, dependencies);
+  }
 }
