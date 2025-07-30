@@ -19,7 +19,7 @@ type TimelineProps = {
     duration: number;
     status?: number;
     responseOK: boolean;
-    json?: unknown; //string[] | null ;
+    json?: unknown; 
     error?: string | null;
     label?: string;
     location?: string;

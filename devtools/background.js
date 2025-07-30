@@ -9,7 +9,7 @@ chrome.runtime.onConnect.addListener((port) => {
     });
 
     port.onMessage.addListener((msg) => {
-      if (msg.type === 'ping') return; // no-op
+      if (msg.type === 'ping') return; 
       console.log('[Background] Received from DevTools:', msg);
     });
   }
@@ -17,7 +17,6 @@ chrome.runtime.onConnect.addListener((port) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (devtoolsPort) {
-    console.log('2. FROM BACKGROUND SCRIPT: message: ', message);
     devtoolsPort.postMessage(message);
   }
 });
