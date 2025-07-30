@@ -59,6 +59,8 @@ function Timeline({ events }: TimelineProps) {
       switch (element.type) {
         case 'await-event':
           return 'Await-Event';
+        case 'useEffect':
+          return 'useEffect Hook';
         case 'error':
           return `Error Event: ${element.source}`;
         default:
