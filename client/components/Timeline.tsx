@@ -166,12 +166,9 @@ function Timeline({ events }: TimelineProps) {
             </details>
           )}
 
-          <div className='devtools-button-container'>
-            <button className='mini ui button devtools-secondary'>
-              More Info
-            </button>
+          {/* <div className='devtools-button-container'>
             <button className='mini ui button devtools-primary'>Ask AI</button>
-          </div>
+          </div> */}
         </div>
       </VerticalTimelineElement>
     );
