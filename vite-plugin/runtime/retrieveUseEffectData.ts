@@ -35,6 +35,8 @@ export function retrieveUseEffectData(
   dependencies?: React.DependencyList | string,
   fileName?: string
 ) {
+
+  
   console.log('ENTERED retrieve USE EFFECT DATA function');
   console.log('DEPENDENCIES', dependencies);
   console.log('TYPE OF DEPENDENCIES', typeof dependencies);
@@ -50,7 +52,7 @@ export function retrieveUseEffectData(
       const duration = performance.now() - start;
 
       //?maybe we add a payload key to put the method specific information?
-      window.postMessage(
+      setTimeout(() => { window.postMessage(
         {
           source: 'track-react-plugin',
           type: 'useEffect',
@@ -62,7 +64,7 @@ export function retrieveUseEffectData(
           responseOk: true,
         },
         '*'
-      );
+      )}, 1);
       return cleanup;
     });
   } else {
@@ -73,7 +75,7 @@ export function retrieveUseEffectData(
 
       const duration = performance.now() - start;
       //?maybe we add a payload key to put the method specific information?
-      window.postMessage(
+      setTimeout(() => { window.postMessage(
         {
           source: 'track-react-plugin',
           type: 'useEffect',
@@ -85,7 +87,7 @@ export function retrieveUseEffectData(
           responseOk: true,
         },
         '*'
-      );
+      )}, 1);
       return cleanup;
     }, dependencies);
   }

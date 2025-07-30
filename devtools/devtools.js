@@ -10,7 +10,8 @@ chrome.devtools.panels.create(
 // Set up connection to background script
 const port = chrome.runtime.connect({ name: 'track-react-bridge' });
 
-//This is to keep the chrome heartbeat alive
+//We need this setInterval because it "pings" the chrome runtime event listener --> keeping it active
+  //Without it, the chrome extension will unload all the data and become unresponsive
 setInterval(() => {
   port.postMessage({ type: 'ping' });
 }, 10000)
