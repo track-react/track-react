@@ -1,28 +1,34 @@
 import { Plugin } from 'vite';
 import path from 'path';
 
-import renameFetch from '../babel-plugins/renameFetch.js';
+import renameUseEffect from '../babel-plugins/renameUseEffect.js';
 
-export function fetchPlugin(): Plugin { 
+let viteMode = 'development'; // fallback
+
+export function useEffectPlugin(): Plugin {
   console.log('*****ENTERING PLUGIN******');
   // Returns a Vite-compatible plugin object
-  // can be imported to vite.config.ts as trackReactPlugin()
+  // can be imported to vite.config.ts as reactEventsPlugin()
   return {
-    name: 'vite-plugin-fetchPlugin', // plugin name
+    name: 'vite-plugin-useEffectPlugin', // plugin name
     enforce: 'pre', // specifies that this plugin will run before all other vite build logic
     apply: 'serve', // This ensures the plugin only runs during development
 
     resolveId(id) {
       // anywhere retrieveFetchData is added -> adding an explicit path
       // so user can use import { retrieveFetchData } from 'retrieveFetchData' --> creating an alias
-      if (id === 'retrieveFetchData') {
-        return path.resolve(__dirname, '../runtime/retrieveFetchData.ts');
+      if (id === 'retrieveUseEffectData') {
+        return path.resolve(__dirname, '../runtime/retrieveUseEffectData.ts');
       }
     },
 
     async transform(code, id) {
+      // Skip transformation in production
+      if (viteMode !== 'development') {
+        return null;
+      }
       // ignore all files that don't end in .js .jsx .ts .tsx
-      // or have already been transformed
+      //or have already been transformed
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||
@@ -38,11 +44,11 @@ export function fetchPlugin(): Plugin {
       ) {
         return null;
       }
-      if (code.includes('fetch(')) {
-        console.log(`[plugin] ${id} contains fetch calls, transforming...`);
+      if (code.includes('useEffect(')) {
+        console.log(`[plugin] ${id} contains useEffect calls, transforming...`);
       }
 
-      // Use Babel to transform the code with the renameFetch plugin
+      // Use Babel to transform the code with the renameUseEffect plugin
       const babel = await import('@babel/core');
       const jsxSyntax = (await import('@babel/plugin-syntax-jsx')).default;
       const tsSyntax = [
@@ -52,15 +58,15 @@ export function fetchPlugin(): Plugin {
 
       const result = await babel.transformAsync(code, {
         filename: id,
-        plugins: [jsxSyntax, ...[tsSyntax], renameFetch],
+        plugins: [jsxSyntax, ...[tsSyntax], renameUseEffect],
         sourceMaps: true,
         configFile: false,
         parserOpts: {
           sourceType: 'module',
-          plugins: ['jsx', 'typescript'], 
+          plugins: ['jsx', 'typescript'],
         },
       });
-  
+
       // Return the transformed code and map (if available)
       if (result && result.code) {
         return {
@@ -72,13 +78,11 @@ export function fetchPlugin(): Plugin {
     },
 
     configResolved(config) {
+      viteMode = config.mode;
+      console.log('config.mode: ', config.mode);
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('track-react plugin active in:', config);
     },
   };
 }
-
-
-
-

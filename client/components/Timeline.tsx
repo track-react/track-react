@@ -23,6 +23,8 @@ type TimelineProps = {
     error?: string | null;
     label?: string;
     location?: string;
+    dependencies?: [];
+    hasCleanup?: boolean;
   }[];
 };
 
@@ -127,15 +129,31 @@ function Timeline({ events }: TimelineProps) {
               </>
             )}
 
+            {el.hasCleanup && (
+              <>
+                <span className='devtools-label'>Has Cleanup Function:</span>
+                <span title='hasCleanup'>{el.hasCleanup.toString()}</span>
+              </>
+            )}
+
             {el.error && (
               <>
                 <span className='devtools-label'>Error:</span>
-                <span className='devtools-status-error' title={el.error}>
+                <span
+                  className='devtools-status-error'
+                  title={el.error}
+                >
                   {truncateText(el.error)}
                 </span>
               </>
             )}
           </div>
+          {el.dependencies && (
+            <details className='devtools-json-summary'>
+              <summary>Dependencies</summary>
+              <pre className='devtools-json-content'>{el.dependencies}</pre>
+            </details>
+          )}
           {jsonString && (
             <details className='devtools-json-summary'>
               <summary>Response Data</summary>
@@ -155,8 +173,8 @@ function Timeline({ events }: TimelineProps) {
   });
 
   return (
-    <div className="devtools-timeline-container">
-      <VerticalTimeline lineColor="#E8EAED">
+    <div className='devtools-timeline-container'>
+      <VerticalTimeline lineColor='#E8EAED'>
         {verticalTimelineElements}
       </VerticalTimeline>
     </div>

@@ -16,6 +16,10 @@
     "./retrieveAwaitData": {
       "import": "./dist/runtime/retrieveAwaitData.js",
       "require": "./dist/runtime/retrieveAwaitData.js"
+    },
+    "./retrieveUseEffectData": {
+      "import": "./dist/runtime/retrieveUseEffectData.js",
+      "require": "./dist/runtime/retrieveUseEffectData.js"
     }
   },
   "files": [

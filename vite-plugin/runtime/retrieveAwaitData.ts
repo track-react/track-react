@@ -11,7 +11,9 @@ export function retrieveAwaitData<T>(
   const start = performance.now();
   let responseOk = true;
   let errorMessage: string | null = null;
-
+  if (label.includes('retrieveFetchData')) {
+    label = 'fetch'
+  }
   console.log('[retrieveAwaitData] is trying!');
 
   return promise.then(result => {
