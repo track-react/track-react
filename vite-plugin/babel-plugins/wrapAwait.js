@@ -48,7 +48,10 @@ export default function wrapAwait(babel) {
 
         // Here we are declaring all the variables that will displayed in the 'location'.
         const label = argPath.getSource() || 'await';
-        const fileName = state.file.opts.filename || 'unknown';
+        // const fileName = state.file.opts.filename || 'unknown';
+        const filePath = state?.file?.opts?.filename || 'unknown';
+        const fileName = filePath.split('/').pop();
+        
         const line = path.node.loc?.start?.line || 0;
         const column = path.node.loc?.start?.column || 0;
         const location = `${fileName}:${line}:${column}`;

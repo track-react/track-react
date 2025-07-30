@@ -10,6 +10,11 @@ chrome.devtools.panels.create(
 // Set up connection to background script
 const port = chrome.runtime.connect({ name: 'track-react-bridge' });
 
+//This is to keep the chrome heartbeat alive
+setInterval(() => {
+  port.postMessage({ type: 'ping' });
+}, 10000)
+
 // Listen for messages coming from background.js
 port.onMessage.addListener((message) => {
 
