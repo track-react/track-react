@@ -25,8 +25,12 @@ export default defineConfig({
   external: [
     'vite',
     '@babel/core',
-    '@babel/preset-typescript', // add others if you import them at runtime
+    '@babel/plugin-syntax-jsx',
+    '@babel/plugin-syntax-typescript',
+    'fs',
+    'path',
   ],
+
   tsconfig: 'tsconfig.json',
 
   //⑥ run after build succeeds
