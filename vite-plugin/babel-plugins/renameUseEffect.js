@@ -18,7 +18,7 @@ export default function renameUseEffect(babel, ...args) {
             const sourceType =
               path.node.sourceType ??
               state.file.ast?.program?.sourceType ??
-              'module'; // default to ESM
+              'module';
 
             const useRequire = sourceType === 'script';
             const importStatement = useRequire
@@ -37,10 +37,10 @@ export default function renameUseEffect(babel, ...args) {
             console.log('replacing normal useEffect');
             callee.replaceWith(t.identifier('retrieveUseEffectData'));
 
-            const args = path.get('arguments'); // arguments of useEffecct
-            //! might need to take out the question marks below
+            const args = path.get('arguments');
+
             const filePath = state?.file?.opts?.filename || 'unknown';
-            const fileName = filePath.split('/').pop(); // trimming so its just file name
+            const fileName = filePath.split('/').pop();
             const line = path.node.loc?.start?.line || 0;
             const column = path.node.loc?.start?.column || 0;
             const location = `${fileName}:${line}:${column}`;

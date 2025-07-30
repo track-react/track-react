@@ -19,7 +19,7 @@ type TimelineProps = {
     duration: number;
     status?: number;
     responseOK: boolean;
-    json?: unknown; //string[] | null ;
+    json?: unknown; 
     error?: string | null;
     label?: string;
     location?: string;
@@ -153,8 +153,10 @@ function Timeline({ events }: TimelineProps) {
               </details>
             ) : (
               <>
-                <span className='devtools-label'>Dependencies:</span>
-                <span title='dependencies'>{el.dependencies}</span>
+                <div className='devtools-grid'>
+                  <span className='devtools-label'>Dependencies:</span>
+                  <span title='dependencies'>{el.dependencies}</span>
+                </div>
               </>
             ))}
           {jsonString && (
@@ -164,12 +166,9 @@ function Timeline({ events }: TimelineProps) {
             </details>
           )}
 
-          <div className='devtools-button-container'>
-            <button className='mini ui button devtools-secondary'>
-              More Info
-            </button>
+          {/* <div className='devtools-button-container'>
             <button className='mini ui button devtools-primary'>Ask AI</button>
-          </div>
+          </div> */}
         </div>
       </VerticalTimelineElement>
     );

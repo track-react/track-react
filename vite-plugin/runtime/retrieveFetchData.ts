@@ -1,13 +1,9 @@
 export async function retrieveFetchData(
   ...args: [...Parameters<typeof fetch>, string, string] // fetch args + label + location
-) {
+): Promise<Response | null> {
   // Pop off the last two args (added by the Babel plugin)
-  const location = args.pop(); // last one
-  const label = args.pop(); // second-to-last one
-
-  console.log('Entering retrieveFetchData');
-  console.log('[label]', label);
-  console.log('[location]', location);
+  const location = args.pop();
+  const label = args.pop();
 
   const url = args[0];
   const method = args[1]?.method ?? 'GET';
@@ -39,7 +35,6 @@ export async function retrieveFetchData(
     json = null;
   }
 
-  console.log('Fetch transformed by retrieveFetchData');
   window.postMessage(
     {
       source: 'track-react-plugin',
@@ -59,4 +54,3 @@ export async function retrieveFetchData(
 
   return res;
 }
-

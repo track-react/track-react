@@ -1,7 +1,5 @@
 import './App.css';
-// import { retrieveFetchData } from '../vite-plugin/runtime/retrieveFetchData.ts';
 import { useEffect } from 'react';
-//import { useRef } from 'react';
 import Timeline from './components/Timeline.tsx';
 import { useState } from 'react';
 
@@ -14,7 +12,7 @@ type EventType = {
   duration: number;
   status?: number;
   responseOK: boolean;
-  json?: unknown; //string[] | null;
+  json?: unknown;
   error?: string | null;
   label?: string;
   location?: string;
@@ -29,8 +27,6 @@ function App() {
     const port = chrome.runtime.connect({ name: 'track-react-bridge' });
 
     port.onMessage.addListener((message) => {
-      console.log('✅ Message received in React panel:', message);
-      console.log(' TYPE OF JSON: ', typeof message.json);
       setEvents((prev) => [
         ...prev,
         {
