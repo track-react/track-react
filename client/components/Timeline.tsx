@@ -39,7 +39,7 @@ function Timeline({ events }: TimelineProps) {
       const str = String(text);
       return str.length > maxLen ? str.substring(0, maxLen) + '...' : str;
     };
-
+    console.log('****DEPENDENCY LENGTH', el.dependencies?.toString().length);
     // Helper function to render header content based on type
     const renderHeaderContent = (element: typeof el, success: boolean) => {
       if (element.type === 'fetch-event') {
@@ -148,12 +148,18 @@ function Timeline({ events }: TimelineProps) {
               </>
             )}
           </div>
-          {el.dependencies && (
-            <details className='devtools-json-summary'>
-              <summary>Dependencies</summary>
-              <pre className='devtools-json-content'>{el.dependencies}</pre>
-            </details>
-          )}
+          {el.dependencies &&
+            (el.dependencies.toString().length > 30 ? (
+              <details className='devtools-json-summary'>
+                <summary>Dependencies</summary>
+                <pre className='devtools-json-content'>{el.dependencies}</pre>
+              </details>
+            ) : (
+              <>
+                <span className='devtools-label'>Dependencies:</span>
+                <span title='dependencies'>{el.dependencies}</span>
+              </>
+            ))}
           {jsonString && (
             <details className='devtools-json-summary'>
               <summary>Response Data</summary>
