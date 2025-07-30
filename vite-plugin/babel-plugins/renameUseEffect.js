@@ -41,11 +41,14 @@ export default function renameUseEffect(babel, ...args) {
             //! might need to take out the question marks below
             const filePath = state?.file?.opts?.filename || 'unknown';
             const fileName = filePath.split('/').pop(); // trimming so its just file name
+            const line = path.node.loc?.start?.line || 0;
+            const column = path.node.loc?.start?.column || 0;
+            const location = `${fileName}:${line}:${column}`;
 
             // Add the fileName as last argument
             const newArgs = [
               ...args.map((arg) => arg.node),
-              t.stringLiteral(fileName),
+              t.stringLiteral(location),
             ];
 
             path.node.arguments = newArgs;
