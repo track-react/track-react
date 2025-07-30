@@ -7,6 +7,11 @@ chrome.runtime.onConnect.addListener((port) => {
     port.onDisconnect.addListener(() => {
       devtoolsPort = null;
     });
+
+    port.onMessage.addListener((msg) => {
+      if (msg.type === 'ping') return; // no-op
+      console.log('[Background] Received from DevTools:', msg);
+    });
   }
 });
 
@@ -16,3 +21,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     devtoolsPort.postMessage(message);
   }
 });
+
+
+
