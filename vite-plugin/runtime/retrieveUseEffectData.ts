@@ -80,7 +80,7 @@ export function retrieveUseEffectData(
           start,
           duration,
           hasCleanup: typeof cleanup === 'function',
-          dependencies: dependencies.length === 0 ? '[]' : dependencies, //to make devTool print '[]'
+          dependencies: dependencies.length === 0 ? '[ ]' : dependencies, //to make devTool print '[]'
           location: fileName,
           responseOk: true,
         },
