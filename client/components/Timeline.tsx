@@ -128,7 +128,7 @@ function Timeline({ events }: TimelineProps) {
 
             {el.hasCleanup != undefined && (
               <>
-                <span className='devtools-label'>Has Cleanup Function:</span>
+                <span className='devtools-label'>Cleanup:</span>
                 <span title='hasCleanup'>{el.hasCleanup.toString()}</span>
               </>
             )}
