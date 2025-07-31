@@ -9,6 +9,7 @@ import 'react-vertical-timeline-component/style.min.css';
 
 import '../App.css';
 
+
 type TimelineProps = {
   events: {
     source: string;
