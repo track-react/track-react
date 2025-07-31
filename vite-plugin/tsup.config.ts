@@ -22,7 +22,7 @@ export default defineConfig({
   target: 'node18',
 
   // ⑤ leave these deps unbundled
-  external: [
+  noExternal: [
     'vite',
     '@babel/core',
     '@babel/preset-typescript', // add others if you import them at runtime
