@@ -2,6 +2,8 @@ import { Plugin } from 'vite';
 import path from 'path';
 import renameFetch from '../babel-plugins/renameFetch.js';
 
+let viteMode = 'development'; // fallback
+
 export function fetchPlugin(): Plugin {
   return {
     name: 'vite-plugin-fetchPlugin', // plugin name
@@ -17,6 +19,9 @@ export function fetchPlugin(): Plugin {
 
     async transform(code, id) {
       // ignoring files that have already been transformed
+      if (viteMode !== 'development') {
+        return null;
+      };
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||

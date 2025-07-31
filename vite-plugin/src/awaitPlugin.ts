@@ -2,20 +2,25 @@ import { Plugin } from 'vite';
 import path from 'path';
 import wrapAwait from '../babel-plugins/wrapAwait.js';
 
-export function awaitPlugin(): Plugin {
+let viteMode = 'development'; // fallback
 
+export function awaitPlugin(): Plugin {
   return {
     name: 'vite-plugin-awaitPlugin',
     enforce: 'pre',
     apply: 'serve',
 
     resolveId(id) {
+      // anywhere retrieveAwaitData is added -> adding an explicit path
       if (id === 'retrieveAwaitData') {
         return path.resolve(__dirname, '../runtime/retrieveAwaitData.ts');
       }
     },
 
     async transform(code, id) {
+      if (viteMode !== 'development') {
+        return null;
+      }
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||
