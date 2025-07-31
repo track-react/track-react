@@ -11,6 +11,7 @@ export function useEffectPlugin(): Plugin {
     apply: 'serve', // This ensures the plugin only runs during development
 
     resolveId(id) {
+      // anywhere useEffectPlugin is added -> adding an explicit path
       if (id === 'retrieveUseEffectData') {
         return path.resolve(__dirname, '../runtime/retrieveUseEffectData.ts');
       }
