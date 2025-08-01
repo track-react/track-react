@@ -25,17 +25,16 @@ npm install track-react --save-dev
 
 The Track-React extension can be downloaded from the Chrome Web Store.
 
-Optionally the extension can also be added with the `npm run build` command by following the following steps:
+Optionally the extension can also be added with the `npm run build` command by following these steps:
 
 1. Fork and clone the `track-react` repo
 2. Build the extension from the `dist` folder after running the development server — see "Building the Extension" below
 3. Load the extension in Chrome Developer Mode
 4. The track-react panel will appear in Chrome DevTools
 
-
 ### Chrome Devtools Panel
-![alt text](public/track-react-screenshot-sm.jpg)
 
+![alt text](public/track-react-screenshot-sm.jpg)
 
 ## ⚙️ Setup
 
@@ -250,4 +249,4 @@ For issues and questions, please open an issue on the GitHub repository.
 ---
 
 Built with ❤️ for the React development community
-We love you 
+We love you
