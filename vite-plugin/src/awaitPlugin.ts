@@ -65,6 +65,7 @@ export function awaitPlugin(): Plugin {
     },
 
     configResolved(config) {
+      viteMode = config.mode;
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('track-react plugin active in: ', config);
