@@ -21,7 +21,7 @@ export function fetchPlugin(): Plugin {
       // ignoring files that have already been transformed
       if (viteMode !== 'development') {
         return null;
-      };
+      }
       if (
         id.includes('node_modules') ||
         id.includes('retrieveAwaitData') ||
@@ -68,6 +68,7 @@ export function fetchPlugin(): Plugin {
     },
 
     configResolved(config) {
+      viteMode = config.mode;
       // This hook runs after Vite has resolved the final config
       // Logs the current mode (development, production, etc.), confirming the plugin is active
       console.log('track-react plugin active in:', config);
