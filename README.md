@@ -71,6 +71,7 @@ export default defineConfig({
 - What you add to your app is a **front-end–only** development tool: the Vite plugin + Babel transforms and the async event-tracking runtime (`fetch`, `async/await`, `useEffect`). Tracked events are forwarded to the Track-React DevTools panel when the extension is installed.
 - There is **no backend** component. You **do not** need to run any additional servers during development—just run your app and open the Track-React panel in DevTools.
 - Keep it as a **dev dependency** and enable `trackReactPlugin()` in your Vite config. The plugin declares `vite` as a peer dependency.
+
 ### Code Transformation
 
 Track-react uses Babel plugins to transform your code during development:
